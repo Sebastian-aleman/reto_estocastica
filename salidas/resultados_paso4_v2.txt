@@ -1,0 +1,84 @@
+CANTIDADES POR ESPECIE (1 ha)
+    existentes  nuevas  nuevas_base_actual  diferencia_base
+LE           8      34                  25               -9
+SA          38     158                 151               -7
+SC           8      34                  25               -9
+ST           8      34                  25               -9
+OC          10      39                  50               11
+OE           8      30                  50               20
+OR          15      58                  51               -7
+OS          13      52                  51               -1
+PL          16      69                  76                7
+YF           5      21                  25                4
+Malla toroidal: 29 x 34 = 986 nodos, todos de grado 6 (periodo 98.6 x 100.1 m, 999 nodos/ha).
+Total: 129 existentes + 529 nuevas + 328 vacíos = 986 nodos
+La línea base actual repite la secuencia de 21 plantas y NO respeta las proporciones p_s (ver diferencia_base).
+
+SESGO DE BORDE (malla plana de 1003 nodos, recocido sin toroide, semilla 2026)
+Nodos de borde (grado < 6): 123 (12.3% de la malla)
+% de plantas SC y YF que quedan en nodos de borde:
+Base actual       14.3
+Base aleatoria    14.7
+Recocido          42.6
+Si el recocido pone muchas más SC/YF en el borde que la proporción de nodos de borde, está aprovechando que ahí hay menos vecinos. Por eso ahora se usa la malla toroidal.
+
+RECOCIDO: numba no disponible; alfa = 0.995, L = 2000, T_min = 1e-3, paro tras 100 niveles sin mejora contados con T < 1% de T0
+Mejor corrida: #4, T0 = 3.235, 1613 niveles, competencia 608.12 -> 357.42
+
+10 CORRIDAS DEL RECOCIDO (mismo escenario de existentes, semilla 2026)
+                          Base actual Base aleatoria Recocido cantidades base       Recocido  % mejora SA vs actual
+competencia_total       516.90 ± 0.00  609.85 ± 7.62            361.05 ± 1.14  359.59 ± 1.27                   30.4
+competencia_por_planta    0.79 ± 0.00    0.93 ± 0.01              0.55 ± 0.00    0.55 ± 0.00                   30.4
+pares_misma_especie     128.00 ± 0.00  199.10 ± 6.14              7.00 ± 0.00    7.00 ± 0.00                   94.5
+pares_misma_SC            2.00 ± 0.00    6.20 ± 2.82              1.00 ± 0.00    1.00 ± 0.00                   50.0
+pares_misma_YF            0.00 ± 0.00    1.60 ± 1.17              0.00 ± 0.00    0.00 ± 0.00                    NaN
+pares_misma_PL            8.00 ± 0.00   23.80 ± 2.25              0.00 ± 0.00    0.00 ± 0.00                  100.0
+pct_SC_YF_con_PL         58.73 ± 0.00   39.85 ± 6.29             49.68 ± 2.12   60.59 ± 0.62                    3.2
+pct_vacios_junto_SC_YF   36.89 ± 0.00   35.98 ± 3.66             46.62 ± 1.20   46.74 ± 0.98                   26.7
+
+COMPARACIÓN JUSTA (competencia total, 10 corridas)
+                                        competencia_total  desv  % de (a)
+concepto                                                                 
+(a) Base actual                                    516.90  0.00    100.00
+(b) Recocido con cantidades de la base             361.05  1.14     69.85
+(c) Recocido con cantidades p_s                    359.59  1.27     69.57
+(a) - (b): mejora por acomodo                      155.85   NaN     30.15
+(b) - (c): efecto de las cantidades                  1.47   NaN      0.28
+(a) - (c): mejora total                            157.32   NaN     30.43
+
+30 ESCENARIOS DE EXISTENTES (recocido corto: alfa = 0.98, L = 1000)
+                          Base actual  Base aleatoria Recocido cantidades base       Recocido  % mejora SA vs actual
+competencia_total       523.33 ± 5.71  605.57 ± 10.95            369.99 ± 2.34  369.66 ± 2.93                   29.4
+competencia_por_planta    0.80 ± 0.01     0.92 ± 0.02              0.56 ± 0.00    0.56 ± 0.00                   29.4
+pares_misma_especie     124.03 ± 8.35  194.07 ± 15.41              6.90 ± 2.56    7.23 ± 2.64                   94.2
+pares_misma_SC            2.03 ± 0.89     5.37 ± 2.34              0.27 ± 0.52    0.27 ± 0.52                   86.9
+pares_misma_YF            0.83 ± 0.70     1.90 ± 1.30              0.03 ± 0.18    0.03 ± 0.18                   96.0
+pares_misma_PL            9.67 ± 1.97    22.23 ± 4.64              0.70 ± 0.75    0.70 ± 0.75                   92.8
+pct_SC_YF_con_PL         55.34 ± 6.55    40.88 ± 5.29             46.03 ± 3.17   56.37 ± 3.55                    1.9
+pct_vacios_junto_SC_YF   40.10 ± 1.79    35.37 ± 2.15             49.55 ± 1.78   51.34 ± 1.61                   28.0
+
+COMPARACIÓN JUSTA (competencia total, 30 escenarios)
+                                        competencia_total  desv  % de (a)
+concepto                                                                 
+(a) Base actual                                    523.33  5.71    100.00
+(b) Recocido con cantidades de la base             369.99  2.34     70.70
+(c) Recocido con cantidades p_s                    369.66  2.93     70.64
+(a) - (b): mejora por acomodo                      153.33   NaN     29.30
+(b) - (c): efecto de las cantidades                  0.33   NaN      0.06
+(a) - (c): mejora total                            153.66   NaN     29.36
+
+ESCENARIO DE FACILITACIÓN: W[PL,SC] = W[PL,YF] = -0.3 (y simétricos); 10 corridas con las mismas semillas
+La competencia se evalúa con la W original.
+                   Recocido con W  Recocido con W_fac  cambio  cambio %
+pct_SC_YF_con_PL            60.59               98.97   38.38     63.35
+competencia_total          359.59              377.34   17.75      4.94
+
+VALIDACIÓN: MALLA TOROIDAL 10x10, FORMULACIÓN FUERTE (66 plantas, 34 vacíos, x[n1,SA] = 1)
+Estados por nodo: LE 4, SA 20, SC 4, ST 4, OC 5, OE 4, OR 7, OS 6, PL 9, YF 3, vacio 34
+Relajación LP: 22.1168
+MILP (CBC, límite 900 s): estado TimeLimit, 902 s, mejor valor 39.0430 (verificado 39.0430), cota final 22.1168
+Recocido (5 corridas): mejor 33.4464, media 33.4778 ± 0.0166
+Gap recocido vs cota: 33.87%
+Gap recocido vs mejor MILP: -14.33% (negativo = el recocido encontró algo mejor)
+
+Archivos: solucion_1ha.csv (malla toroidal), modelo_tile.gms, milp_tile.log, convergencia_recocido.png, mapa_1ha.png, mapa_zoom.png, boxplot_escenarios.png, resultados_paso4_v2.txt

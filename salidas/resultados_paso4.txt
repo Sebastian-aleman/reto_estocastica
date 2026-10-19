@@ -1,0 +1,49 @@
+CANTIDADES POR ESPECIE (1 ha)
+    existentes  nuevas  nuevas_base_actual  diferencia_base
+LE           8      34                  25               -9
+SA          38     158                 151               -7
+SC           8      34                  25               -9
+ST           8      34                  25               -9
+OC          10      39                  50               11
+OE           8      30                  50               20
+OR          15      58                  51               -7
+OS          13      52                  51               -1
+PL          16      69                  76                7
+YF           5      21                  25                4
+Total: 129 existentes + 529 nuevas + 345 vacíos = 1003 nodos
+La línea base actual repite la secuencia de 21 plantas y NO respeta las proporciones p_s (ver diferencia_base).
+
+RECOCIDO: numba no disponible; alfa = 0.995, L = 2000, T_min = 1e-3, paro tras 200 niveles sin mejora
+Mejor corrida: #10, T0 = 3.330, 1619 niveles, competencia 558.98 -> 313.62
+
+10 CORRIDAS DEL RECOCIDO (mismo escenario de existentes, semilla 2026)
+                          Base actual  Base aleatoria       Recocido  % mejora SA vs actual
+competencia_total       486.39 ± 0.00  566.84 ± 13.80  314.85 ± 0.76                   35.3
+competencia_por_planta    0.74 ± 0.00     0.86 ± 0.02    0.48 ± 0.00                   35.3
+pares_misma_especie     125.00 ± 0.00  182.80 ± 12.45    4.00 ± 0.00                   96.8
+pares_misma_SC            1.00 ± 0.00     4.50 ± 1.96    0.00 ± 0.00                  100.0
+pares_misma_YF            2.00 ± 0.00     2.30 ± 1.34    0.00 ± 0.00                  100.0
+pares_misma_PL            9.00 ± 0.00    19.50 ± 5.04    0.00 ± 0.00                  100.0
+pct_SC_YF_con_PL         53.97 ± 0.00    42.35 ± 4.54   52.21 ± 3.04                   -3.3
+pct_vacios_junto_SC_YF   38.26 ± 0.00    33.33 ± 1.59   41.91 ± 1.91                    9.5
+
+30 ESCENARIOS DE EXISTENTES (recocido corto: alfa = 0.98, L = 1000)
+                          Base actual  Base aleatoria       Recocido  % mejora SA vs actual
+competencia_total       490.39 ± 6.81  571.31 ± 12.77  323.36 ± 2.32                   34.1
+competencia_por_planta    0.75 ± 0.01     0.87 ± 0.02    0.49 ± 0.00                   34.1
+pares_misma_especie     117.80 ± 7.68  186.20 ± 12.42    7.20 ± 2.55                   93.9
+pares_misma_SC            1.53 ± 0.97     4.83 ± 2.28    0.13 ± 0.35                   91.3
+pares_misma_YF            0.83 ± 0.79     2.03 ± 1.63    0.03 ± 0.18                   96.0
+pares_misma_PL            8.00 ± 2.23    21.03 ± 3.98    0.80 ± 0.92                   90.0
+pct_SC_YF_con_PL         54.23 ± 5.84    39.07 ± 6.29   49.66 ± 4.55                   -8.4
+pct_vacios_junto_SC_YF   38.66 ± 2.06    33.56 ± 1.59   44.41 ± 2.09                   14.9
+
+VALIDACIÓN: MALLA TOROIDAL 10x10 (66 plantas, 34 vacíos)
+Plantas por especie: LE 4, SA 20, SC 4, ST 4, OC 5, OE 4, OR 7, OS 6, PL 9, YF 3
+MILP (CBC, límite 600 s): estado TimeLimit, 605 s, mejor valor 50.0574 (verificado 50.0574), cota 0.0000
+Recocido (5 corridas): mejor 33.4464, media 33.4767 ± 0.0161
+Gap recocido vs mejor MILP: -33.18% (negativo = el recocido encontró algo mejor)
+Gap recocido vs cota MILP: 100.00%
+Nota: con la linealización y >= x_i + x_j - 1 la relajación LP vale ~0 (con x fraccionarias todas las y pueden ser 0), así que la cota de CBC es débil y no certifica el óptimo.
+
+Archivos: solucion_1ha.csv, modelo_tile.gms, convergencia_recocido.png, mapa_1ha.png, mapa_zoom.png, boxplot_escenarios.png, resultados_paso4.txt
