@@ -1,0 +1,33 @@
+{
+  "fecha": "2026-10-22T22:18:56",
+  "modelo_pc": "ASUSTeK COMPUTER INC. ASUS TUF Gaming A16 FA607NUG_FA607NUG",
+  "sistema_operativo": {
+    "nombre": "Microsoft Windows 11 Home",
+    "version": "10.0.26200"
+  },
+  "disco": {
+    "unidad": "C:\\",
+    "total_gb": 447.46,
+    "libre_gb": 102.71
+  },
+  "ram_total_gb": 15.27,
+  "procesador": {
+    "nombre": "AMD Ryzen 7 7445HS w/ Radeon 740M Graphics",
+    "frecuencia_ghz": 3.2,
+    "nucleos_fisicos": 6,
+    "nucleos_logicos": 12
+  },
+  "software": {
+    "Python": "3.14.3",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scipy": "1.18.0",
+    "networkx": "3.6.1",
+    "pulp": "4.0.0",
+    "numba": "no instalado",
+    "matplotlib": "3.11.1",
+    "CBC": "devel (cbcbox 2.935)",
+    "GAMS": "54.5.0"
+  },
+  "interprete": "C:\\Python314\\python.exe"
+}

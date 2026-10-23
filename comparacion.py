@@ -14,7 +14,6 @@ N_CORRIDAS = 10
 N_ESCENARIOS = 30
 N_CORRIDAS_TILE = 5
 PARAMETROS_CORTOS = {"alfa": 0.98, "L": 1000}
-PLANTAS_TILE = round(0.658 * 100)
 W_FACILITACION = -0.3
 ZOOM = (40, 60)
 
@@ -24,7 +23,6 @@ COLOR_ESPECIE = {
     "OC": "#f7c4a8", "OE": "#f08a5d", "OR": "#d2501f", "OS": "#8f3410",
     "PL": "#1baf7a", "YF": "#eda100",
 }
-COLOR_VACIO = "#e3e3e3"
 
 # Signo para que "mejora" sea positiva: -1 si conviene que baje, +1 si conviene que suba
 SENTIDO_METRICAS = {
@@ -35,32 +33,26 @@ SENTIDO_METRICAS = {
     "pares_misma_YF": -1,
     "pares_misma_PL": -1,
     "pct_SC_YF_con_PL": 1,
-    "pct_vacios_junto_SC_YF": 1,
 }
 METODOS = ["Base actual", "Base aleatoria", "Recocido cantidades base", "Recocido"]
 
 
 # ---------------------------------------------------------------- Métricas
 
-def calcular_metricas(asig, aristas_idx, vecinos, W_ext, especies):
+def calcular_metricas(asig, aristas_idx, vecinos, W_mat, especies):
     cod = {s: especies.get_loc(s) for s in ["SC", "YF", "PL"]}
-    nodos = asig[:-1]
     a, b = asig[aristas_idx[:, 0]], asig[aristas_idx[:, 1]]
-    misma = (a == b) & (a != rc.VACIO)
-    total = W_ext[a, b].sum()
+    misma = a == b
+    total = W_mat[a, b].sum()
 
-    vecinos_esp = asig[vecinos]
-    sc_yf = np.isin(nodos, [cod["SC"], cod["YF"]])
-    con_pl = (vecinos_esp == cod["PL"]).any(axis=1)
-    vacios = nodos == rc.VACIO
-    junto_sc_yf = np.isin(vecinos_esp, [cod["SC"], cod["YF"]]).any(axis=1)
+    sc_yf = np.isin(asig, [cod["SC"], cod["YF"]])
+    con_pl = (asig[vecinos] == cod["PL"]).any(axis=1)
     return {
         "competencia_total": total,
-        "competencia_por_planta": total / (~vacios).sum(),
+        "competencia_por_planta": total / len(asig),
         "pares_misma_especie": misma.sum(),
         **{f"pares_misma_{s}": (misma & (a == cod[s])).sum() for s in ["SC", "YF", "PL"]},
         "pct_SC_YF_con_PL": 100 * con_pl[sc_yf].mean(),
-        "pct_vacios_junto_SC_YF": 100 * junto_sc_yf[vacios].mean(),
     }
 
 
@@ -99,16 +91,16 @@ def comparacion_justa(tabla):
 # ---------------------------------------------------------------- Experimentos
 
 class Malla:
-    """Datos de una malla listos para el recocido."""
+    """Datos de una malla toroidal listos para el recocido."""
 
     def __init__(self, nodos, aristas, W):
         self.nodos = nodos
         self.aristas_idx, self.vecinos = rc.preparar_malla(nodos, aristas)
-        self.W_ext = rc.W_extendida(W)
+        self.W_mat = W.to_numpy()
         self.especies = W.index
 
     def metricas(self, asig):
-        return calcular_metricas(asig, self.aristas_idx, self.vecinos, self.W_ext, self.especies)
+        return calcular_metricas(asig, self.aristas_idx, self.vecinos, self.W_mat, self.especies)
 
 
 def correr_escenario(malla, existentes, nuevas, semilla_escenario, semilla_sa, nuevas_base=None,
@@ -124,7 +116,7 @@ def correr_escenario(malla, existentes, nuevas, semilla_escenario, semilla_sa, n
         # El recocido arranca de una asignación aleatoria con esas cantidades
         inicial = rc.linea_base_aleatoria(asig_exist, fijo, cantidades, semilla_sa)
         return rc.recocido_simulado(inicial, movibles, malla.vecinos, malla.aristas_idx,
-                                    malla.W_ext, semilla_sa, **parametros_sa)
+                                    malla.W_mat, semilla_sa, **parametros_sa)
 
     sa = recocer(nuevas)
     soluciones = {
@@ -160,21 +152,6 @@ def experimento_escenarios(malla, existentes, nuevas, nuevas_base):
     return pd.DataFrame(filas)
 
 
-def sesgo_de_borde(nodos_plano, aristas_plano, W, existentes, nuevas):
-    """% de SC y YF en nodos de borde (grado < 6) con la malla plana, sin toroide.
-
-    En la malla plana los nodos de borde tienen menos vecinos, así que el recocido
-    tiende a mandar ahí a las especies más vulnerables.
-    """
-    malla_plana = Malla(nodos_plano, aristas_plano, W)
-    _, soluciones, _, _ = correr_escenario(malla_plana, existentes, nuevas, SEMILLA_ESCENARIO, 100)
-    borde = (malla_plana.vecinos < len(nodos_plano)).sum(axis=1) < 6
-    cod = [W.index.get_loc("SC"), W.index.get_loc("YF")]
-    tabla = pd.Series({m: 100 * borde[np.isin(asig[:-1], cod)].mean()
-                       for m, asig in soluciones.items()}, name="pct_SC_YF_en_borde")
-    return tabla, borde.sum(), 100 * borde.mean()
-
-
 def matriz_facilitacion(W, valor=W_FACILITACION):
     W_fac = W.copy()
     for s in ["SC", "YF"]:
@@ -184,13 +161,13 @@ def matriz_facilitacion(W, valor=W_FACILITACION):
 
 def experimento_facilitacion(malla, existentes, nuevas, W_fac):
     """Mismas 10 corridas del recocido pero optimizando con W_fac; métricas con la W original."""
-    W_fac_ext = rc.W_extendida(W_fac)
+    W_fac_mat = W_fac.to_numpy()
     asig_exist, fijo = rc.generar_existentes(existentes, len(malla.nodos), SEMILLA_ESCENARIO)
     filas = []
     for corrida in range(1, N_CORRIDAS + 1):
         inicial = rc.linea_base_aleatoria(asig_exist, fijo, nuevas, 100 * corrida)
         sa = rc.recocido_simulado(inicial, np.flatnonzero(~fijo), malla.vecinos, malla.aristas_idx,
-                                  W_fac_ext, 100 * corrida)
+                                  W_fac_mat, 100 * corrida)
         filas.append({"corrida": corrida, "metodo": "Recocido W_fac", **malla.metricas(sa["asig"])})
     return pd.DataFrame(filas)
 
@@ -198,42 +175,42 @@ def experimento_facilitacion(malla, existentes, nuevas, W_fac):
 # ---------------------------------------------------------------- Validación con MILP
 
 def construir_milp_fuerte(malla, n_s, relajado=False):
-    """MILP con 'vacio' como especie y restricciones de enlace por arista.
+    """MILP sin vacíos con restricciones de enlace por arista.
 
-    Para cada arista (i,j): sum_t y[i,j,s,t] = x[i,s] y sum_s y[i,j,s,t] = x[j,t].
-    Se fija x[n1, SA] = 1 para romper la simetría por traslación del toroide.
+    a[i,s] = 1 si el nodo i lleva la especie s; sum_s a[i,s] = 1 y sum_i a[i,s] = n_s.
+    Para cada arista (i,j): sum_t y[i,j,s,t] = a[i,s] y sum_s y[i,j,s,t] = a[j,t], y >= 0.
+    Se fija a[n1, SA] = 1 para romper la simetría por traslación del toroide.
     """
-    W = malla.W_ext
+    W = malla.W_mat
     nodos = range(len(malla.nodos))
-    estados = range(rc.N_ESPECIES + 1)
+    especies = range(rc.N_ESPECIES)
     aristas = range(len(malla.aristas_idx))
 
     prob = pulp.LpProblem("tile_fuerte", pulp.LpMinimize)
-    x = prob.add_variable_dict("x", (nodos, estados), lowBound=0, upBound=1,
+    a = prob.add_variable_dict("a", (nodos, especies), lowBound=0, upBound=1,
                                cat="Continuous" if relajado else "Binary")
-    y = prob.add_variable_dict("y", (aristas, estados, estados), lowBound=0)
-    prob += pulp.lpSum(W[s, t] * y[e, s, t] for e in aristas for s in estados for t in estados
-                       if W[s, t] != 0)
+    y = prob.add_variable_dict("y", (aristas, especies, especies), lowBound=0)
+    prob += pulp.lpSum(W[s, t] * y[e, s, t] for e in aristas for s in especies for t in especies)
     for i in nodos:
-        prob += pulp.lpSum(x[i, s] for s in estados) == 1
-    for s in estados:
-        prob += pulp.lpSum(x[i, s] for i in nodos) == int(n_s.iloc[s])
+        prob += pulp.lpSum(a[i, s] for s in especies) == 1
+    for s in especies:
+        prob += pulp.lpSum(a[i, s] for i in nodos) == int(n_s.iloc[s])
     for e, (i, j) in enumerate(malla.aristas_idx):
-        for s in estados:
-            prob += pulp.lpSum(y[e, s, t] for t in estados) == x[i, s]
-            prob += pulp.lpSum(y[e, t, s] for t in estados) == x[j, s]
-    prob += x[0, malla.especies.get_loc("SA")] == 1
-    return prob, x
+        for s in especies:
+            prob += pulp.lpSum(y[e, s, t] for t in especies) == a[i, s]
+            prob += pulp.lpSum(y[e, t, s] for t in especies) == a[j, s]
+    prob += a[0, malla.especies.get_loc("SA")] == 1
+    return prob, a
 
 
 def resolver_milp_fuerte(malla, n_s, ruta_log, tiempo_limite=900):
     prob_lp, _ = construir_milp_fuerte(malla, n_s, relajado=True)
     valor_lp = prob_lp.solve(pulp.COIN_CMD(msg=False)).objective
 
-    prob, x = construir_milp_fuerte(malla, n_s)
+    prob, a = construir_milp_fuerte(malla, n_s)
     estadisticas = prob.solve(pulp.COIN_CMD(msg=False, timeLimit=tiempo_limite, logPath=str(ruta_log)))
-    asig = np.full(len(malla.nodos) + 1, rc.VACIO, dtype=np.int64)
-    for (i, s), var in x.items():
+    asig = np.full(len(malla.nodos), rc.SIN_ASIGNAR, dtype=np.int64)
+    for (i, s), var in a.items():
         if var.value() is not None and var.value() > 0.5:
             asig[i] = s
 
@@ -250,29 +227,29 @@ def resolver_milp_fuerte(malla, n_s, ruta_log, tiempo_limite=900):
         "cota": cota,
         "estado": estadisticas.status_str,
         "tiempo": estadisticas.time,
-        "valor_verificado": rc.competencia_total(asig, malla.aristas_idx, malla.W_ext),
+        "valor_verificado": rc.competencia_total(asig, malla.aristas_idx, malla.W_mat),
     }
 
 
 def recocido_tile(malla, n_s):
-    """Recocido en la malla toroidal: todos los nodos son movibles, sin existentes."""
+    """Recocido en la malla toroidal: todos los nodos son movibles, sin existentes ni vacíos."""
     n = len(malla.nodos)
     valores = []
     for semilla in range(1, N_CORRIDAS_TILE + 1):
         rng = np.random.default_rng(semilla)
-        inicial = np.append(rng.permutation(rc.contenido(n_s, n - n_s.sum())), rc.VACIO)
+        inicial = rng.permutation(rc.contenido(n_s))
         sa = rc.recocido_simulado(inicial, np.arange(n), malla.vecinos, malla.aristas_idx,
-                                  malla.W_ext, semilla)
+                                  malla.W_mat, semilla)
         valores.append(sa["valor"])
     return np.array(valores)
 
 
 def escribir_gams_tile(n_s, ruta, tiempo_limite=900):
-    """Formulación fuerte; 'vacio' no aparece en W.inc, así que su competencia es 0."""
+    """Formulación fuerte sin vacíos (igual al MILP de PuLP)."""
     cantidades = ", ".join(f"{s} {int(v)}" for s, v in n_s.items())
-    ruta.write_text(f"""* Modelo exacto del patrón toroidal 10x10, formulación fuerte (igual al MILP de PuLP)
+    ruta.write_text(f"""* Modelo exacto del patrón toroidal 10x10 sin vacíos, formulación fuerte (igual al MILP de PuLP)
 * Correr desde la carpeta salidas/ (usa nodos_tile.inc, aristas_tile.inc y W.inc)
-Sets s 'especies y vacio' /{", ".join(n_s.index)}/
+Sets s 'especies' /{", ".join(n_s.index)}/
      i 'nodos' /
 $include nodos_tile.inc
 /
@@ -281,31 +258,30 @@ $include aristas_tile.inc
 /;
 Alias (s,t), (i,j);
 
-* W.inc no trae la fila ni la columna de vacio: GAMS las deja en 0
 Table w(s,t)
 $include W.inc
 ;
 
-Parameter n(s) 'nodos por estado (total {int(n_s.sum())})' /{cantidades}/;
+Parameter n(s) 'plantas por especie (total {int(n_s.sum())} = todos los nodos)' /{cantidades}/;
 
-Binary Variable x(i,s);
+Binary Variable a(i,s);
 Positive Variable y(i,j,s,t);
 Variable z;
 
 * Romper simetría por traslación del toroide
-x.fx('n1','SA') = 1;
+a.fx('n1','SA') = 1;
 
-Equations fo, un_estado(i), cantidad(s), enlace_i(i,j,s), enlace_j(i,j,t);
+Equations fo, una_especie(i), cantidad(s), enlace_i(i,j,s), enlace_j(i,j,t);
 fo..                    z =e= sum((i,j,s,t)$E(i,j), w(s,t)*y(i,j,s,t));
-un_estado(i)..          sum(s, x(i,s)) =e= 1;
-cantidad(s)..           sum(i, x(i,s)) =e= n(s);
-enlace_i(i,j,s)$E(i,j).. sum(t, y(i,j,s,t)) =e= x(i,s);
-enlace_j(i,j,t)$E(i,j).. sum(s, y(i,j,s,t)) =e= x(j,t);
+una_especie(i)..        sum(s, a(i,s)) =e= 1;
+cantidad(s)..           sum(i, a(i,s)) =e= n(s);
+enlace_i(i,j,s)$E(i,j).. sum(t, y(i,j,s,t)) =e= a(i,s);
+enlace_j(i,j,t)$E(i,j).. sum(s, y(i,j,s,t)) =e= a(j,t);
 
 Model tile /all/;
 option reslim = {tiempo_limite}, optcr = 0;
 Solve tile using MIP minimizing z;
-display z.l, x.l;
+display z.l, a.l;
 """, encoding="utf-8")
 
 
@@ -325,7 +301,7 @@ def graficar_convergencia(historial, ruta):
     lineas = ax.get_legend_handles_labels()
     lineas2 = ax2.get_legend_handles_labels()
     ax.legend(lineas[0] + lineas2[0], lineas[1] + lineas2[1], loc="upper right")
-    ax.set_title("Convergencia del recocido simulado (1 ha toroidal)")
+    ax.set_title("Convergencia del recocido simulado (1 ha toroidal, sin vacíos)")
     fig.tight_layout()
     fig.savefig(ruta, dpi=150)
     plt.close(fig)
@@ -334,20 +310,19 @@ def graficar_convergencia(historial, ruta):
 def _dibujar_mapa(ax, nodos, asig, fijo, especies, tam, aristas_idx=None, etiquetas=False):
     x, y = nodos["x"].to_numpy(), nodos["y"].to_numpy()
     if aristas_idx is not None:
-        for a, b in aristas_idx:
+        largo = np.hypot(x[aristas_idx[:, 0]] - x[aristas_idx[:, 1]],
+                         y[aristas_idx[:, 0]] - y[aristas_idx[:, 1]])
+        for (a, b), l in zip(aristas_idx, largo):
             # En el toroide las aristas que dan la vuelta no se dibujan
-            if abs(x[a] - x[b]) < 4 and abs(y[a] - y[b]) < 4:
+            if l < 2 * largo.min():
                 ax.plot(x[[a, b]], y[[a, b]], color="#cccccc", linewidth=0.6, zorder=0)
-    contenido = asig[:-1]
-    vacio = contenido == rc.VACIO
-    ax.scatter(x[vacio], y[vacio], s=tam * 0.5, color=COLOR_VACIO, zorder=1)
     for k, s in enumerate(especies):
-        es = contenido == k
+        es = asig == k
         ax.scatter(x[es], y[es], s=tam, color=COLOR_ESPECIE[s],
                    edgecolors=np.where(fijo[es], "black", "none"), linewidths=1.2, zorder=2)
         if etiquetas:
             for xi, yi in zip(x[es], y[es]):
-                ax.text(xi, yi, s, ha="center", va="center", fontsize=7, zorder=3, clip_on=True,
+                ax.text(xi, yi, s, ha="center", va="center", fontsize=8, zorder=3, clip_on=True,
                         color="white" if s in ["SA", "SC", "OR", "OS", "PL"] else "black")
     ax.set_aspect("equal")
 
@@ -357,9 +332,9 @@ def graficar_mapas(nodos, soluciones, fijo, especies, aristas_idx, carpeta):
         fig, axes = plt.subplots(1, 2, figsize=(16, 8.5))
         for ax, metodo in zip(axes, ["Base actual", "Recocido"]):
             if zoom is None:
-                _dibujar_mapa(ax, nodos, soluciones[metodo], fijo, especies, tam=18)
+                _dibujar_mapa(ax, nodos, soluciones[metodo], fijo, especies, tam=28)
             else:
-                _dibujar_mapa(ax, nodos, soluciones[metodo], fijo, especies, tam=330,
+                _dibujar_mapa(ax, nodos, soluciones[metodo], fijo, especies, tam=700,
                               aristas_idx=aristas_idx, etiquetas=True)
                 ax.set_xlim(zoom[0] - 1.5, zoom[1] + 1.5)
                 ax.set_ylim(zoom[0] - 1.5, zoom[1] + 1.5)
@@ -368,11 +343,10 @@ def graficar_mapas(nodos, soluciones, fijo, especies, aristas_idx, carpeta):
             ax.set_ylabel("y (m)")
         for s, color in COLOR_ESPECIE.items():
             axes[0].scatter([], [], color=color, label=s)
-        axes[0].scatter([], [], color=COLOR_VACIO, label="Vacío")
         axes[0].scatter([], [], color="white", edgecolors="black", label="Existente (borde negro)")
-        fig.legend(*axes[0].get_legend_handles_labels(), loc="lower center", ncol=12, frameon=False)
+        fig.legend(*axes[0].get_legend_handles_labels(), loc="lower center", ncol=11, frameon=False)
         region = "1 ha toroidal" if zoom is None else f"zoom {zoom[1] - zoom[0]}x{zoom[1] - zoom[0]} m"
-        fig.suptitle(f"Acomodo por especie ({region}): línea base actual vs recocido simulado")
+        fig.suptitle(f"Acomodo por especie ({region}, sin vacíos): línea base actual vs recocido simulado")
         fig.tight_layout(rect=(0, 0.07, 1, 0.96))
         fig.savefig(carpeta / nombre, dpi=150)
         plt.close(fig)
@@ -384,68 +358,65 @@ def graficar_boxplot_escenarios(tabla, ruta):
                tick_labels=[m.replace(" cantidades", "\ncantidades") for m in METODOS],
                medianprops={"color": "black"})
     ax.set_ylabel("Competencia total")
-    ax.set_title(f"Competencia total en {N_ESCENARIOS} escenarios de existentes (1 ha toroidal)")
+    ax.set_title(f"Competencia total en {N_ESCENARIOS} escenarios de existentes (1 ha toroidal, sin vacíos)")
     fig.tight_layout()
     fig.savefig(ruta, dpi=150)
     plt.close(fig)
 
 
 def guardar_solucion(nodos, asig, fijo, especies, ruta):
-    nombres = np.array(list(especies) + ["vacio"])
+    nombres = np.array(list(especies))
     pd.DataFrame({
         "id_nodo": nodos["id"],
         "x": nodos["x"].round(3),
         "y": nodos["y"].round(3),
-        "especie": nombres[asig[:-1]],
+        "especie": nombres[asig],
         "existente": fijo,
     }).to_csv(ruta, index=False)
 
 
 # ---------------------------------------------------------------- Todo el paso 4
 
-def ejecutar_paso4(W, prop_base, nodos_plano, aristas_plano, nodos_tile, aristas_tile, carpeta,
-                   tiempo_milp=900, sep=3.4):
+def ejecutar_paso4(W, prop_base, nodos_tile, aristas_tile, carpeta, densidad_ha=658,
+                   tiempo_milp=900):
+    sep = mll.separacion_tresbolillo(densidad_ha)
+    dy = sep * np.sqrt(3) / 2
     nodos_ha, aristas_ha = mll.generar_malla_tresbolillo(100, 100, sep, toroidal=True)
     malla_ha = Malla(nodos_ha, aristas_ha, W)
-    existentes, nuevas = rc.cargar_cantidades(carpeta)
-    nuevas_base = rc.cantidades_linea_base(W.index)
-    n_vacios = len(nodos_ha) - existentes.sum() - nuevas.sum()
-    n_col, n_fil = int(round(100 / sep)), int(round(100 / (sep * np.sqrt(3) / 2)))
+    n_col, n_fil = mll.dimensiones_toroide(100, 100, sep)
+    area_ha = n_col * sep * n_fil * dy / 10000
+    existentes, nuevas = rc.cargar_cantidades(carpeta, len(nodos_ha), densidad_ha)
+    nuevas_base = rc.cantidades_linea_base(W.index, nuevas.sum())
     texto = []
 
     cantidades = pd.DataFrame({"existentes": existentes, "nuevas": nuevas,
                                "nuevas_base_actual": nuevas_base,
                                "diferencia_base": nuevas_base - nuevas})
-    texto += ["CANTIDADES POR ESPECIE (1 ha)", cantidades.to_string(),
-              f"Malla toroidal: {n_col} x {n_fil} = {len(nodos_ha)} nodos, todos de grado 6 "
-              f"(periodo {n_col * sep:.1f} x {n_fil * sep * np.sqrt(3) / 2:.1f} m, "
-              f"{len(nodos_ha) / (n_col * sep * n_fil * sep * np.sqrt(3) / 2 / 10000):.0f} nodos/ha).",
-              f"Total: {existentes.sum()} existentes + {nuevas.sum()} nuevas + {n_vacios} vacíos "
-              f"= {len(nodos_ha)} nodos",
-              "La línea base actual repite la secuencia de 21 plantas y NO respeta las "
-              "proporciones p_s (ver diferencia_base).", ""]
-
-    # Sesgo de borde con la malla plana
-    borde, n_borde, pct_borde = sesgo_de_borde(nodos_plano, aristas_plano, W, existentes, nuevas)
-    texto += [f"SESGO DE BORDE (malla plana de {len(nodos_plano)} nodos, recocido sin toroide, "
-              f"semilla {SEMILLA_ESCENARIO})",
-              f"Nodos de borde (grado < 6): {n_borde} ({pct_borde:.1f}% de la malla)",
-              "% de plantas SC y YF que quedan en nodos de borde:",
-              borde.round(1).to_string(),
-              "Si el recocido pone muchas más SC/YF en el borde que la proporción de nodos de borde, "
-              "está aprovechando que ahí hay menos vecinos. Por eso ahora se usa la malla toroidal.", ""]
+    texto += [f"MALLA SIN VACÍOS: densidad_ha = {densidad_ha}",
+              f"Separación del tresbolillo: sep = sqrt(2*10000 / (sqrt(3)*{densidad_ha})) = {sep:.4f} m "
+              f"(entre filas {dy:.4f} m)",
+              f"Malla toroidal: {n_col} columnas x {n_fil} filas = {len(nodos_ha)} nodos, todos de grado 6 "
+              f"(periodo {n_col * sep:.2f} x {n_fil * dy:.2f} m = {area_ha:.4f} ha, "
+              f"{len(nodos_ha) / area_ha:.2f} nodos/ha).",
+              f"Total: {existentes.sum()} existentes ({rc.TOTAL_EXISTENTES}/{densidad_ha} de los nodos) + "
+              f"{nuevas.sum()} nuevas = {len(nodos_ha)} nodos, 0 vacíos",
+              "",
+              "CANTIDADES POR ESPECIE (malla de 1 ha)", cantidades.to_string(),
+              "La línea base actual repite la secuencia de 21 plantas en todos los nodos libres y NO "
+              "respeta las proporciones p_s (ver diferencia_base).", ""]
 
     # 10 corridas con un mismo escenario
     tabla_semillas, mejor = experimento_semillas(malla_ha, existentes, nuevas, nuevas_base)
     sa = mejor["sa"]
     texto += [f"RECOCIDO: numba {'sí' if rc.HAY_NUMBA else 'no'} disponible; alfa = 0.995, L = 2000, "
-              "T_min = 1e-3, paro tras 100 niveles sin mejora contados con T < 1% de T0",
+              "T_min = 1e-3, paro tras 100 niveles sin mejora contados con T < 1% de T0; "
+              "movimiento: intercambio especie-especie entre nodos nuevos",
               f"Mejor corrida: #{mejor['corrida']}, T0 = {sa['T0']:.3f}, "
               f"{len(sa['historial'])} niveles, competencia {sa['valor_inicial']:.2f} -> {sa['valor']:.2f}",
               "",
               f"{N_CORRIDAS} CORRIDAS DEL RECOCIDO (mismo escenario de existentes, semilla {SEMILLA_ESCENARIO})",
               resumir_metricas(tabla_semillas).to_string(), "",
-              "COMPARACIÓN JUSTA (competencia total, 10 corridas)",
+              f"COMPARACIÓN JUSTA (competencia total, {N_CORRIDAS} corridas)",
               comparacion_justa(tabla_semillas).to_string(), ""]
 
     # 30 escenarios de existentes
@@ -459,11 +430,12 @@ def ejecutar_paso4(W, prop_base, nodos_plano, aristas_plano, nodos_tile, aristas
     tabla_fac = experimento_facilitacion(malla_ha, existentes, nuevas, matriz_facilitacion(W))
     recocido_w = tabla_semillas[tabla_semillas["metodo"] == "Recocido"]
     facilitacion = pd.DataFrame({
-        "Recocido con W": recocido_w[["pct_SC_YF_con_PL", "competencia_total"]].mean(),
-        "Recocido con W_fac": tabla_fac[["pct_SC_YF_con_PL", "competencia_total"]].mean(),
+        "Recocido con W": recocido_w[list(SENTIDO_METRICAS)].mean(),
+        "Recocido con W_fac": tabla_fac[list(SENTIDO_METRICAS)].mean(),
     })
     facilitacion["cambio"] = facilitacion["Recocido con W_fac"] - facilitacion["Recocido con W"]
-    facilitacion["cambio %"] = facilitacion["cambio"] / facilitacion["Recocido con W"] * 100
+    facilitacion["cambio %"] = (facilitacion["cambio"]
+                                / facilitacion["Recocido con W"].replace(0, np.nan) * 100)
     texto += [f"ESCENARIO DE FACILITACIÓN: W[PL,SC] = W[PL,YF] = {W_FACILITACION} (y simétricos); "
               f"{N_CORRIDAS} corridas con las mismas semillas",
               "La competencia se evalúa con la W original.",
@@ -471,15 +443,14 @@ def ejecutar_paso4(W, prop_base, nodos_plano, aristas_plano, nodos_tile, aristas
 
     # Validación contra el MILP fuerte en la malla toroidal 10x10
     malla_tile = Malla(nodos_tile, aristas_tile, W)
-    n_tile = rc.redondear_a_total(prop_base, PLANTAS_TILE)
-    n_tile_vacio = pd.concat([n_tile, pd.Series({"vacio": len(nodos_tile) - PLANTAS_TILE})])
-    escribir_gams_tile(n_tile_vacio, carpeta / "modelo_tile.gms", tiempo_milp)
+    n_tile = rc.redondear_a_total(prop_base, len(nodos_tile))
+    escribir_gams_tile(n_tile, carpeta / "modelo_tile.gms", tiempo_milp)
     valores_sa = recocido_tile(malla_tile, n_tile)
-    milp = resolver_milp_fuerte(malla_tile, n_tile_vacio, carpeta / "milp_tile.log", tiempo_milp)
+    milp = resolver_milp_fuerte(malla_tile, n_tile, carpeta / "milp_tile.log", tiempo_milp)
     mejor_sa = valores_sa.min()
-    texto += [f"VALIDACIÓN: MALLA TOROIDAL 10x10, FORMULACIÓN FUERTE ({PLANTAS_TILE} plantas, "
-              f"{len(nodos_tile) - PLANTAS_TILE} vacíos, x[n1,SA] = 1)",
-              "Estados por nodo: " + ", ".join(f"{s} {v}" for s, v in n_tile_vacio.items()),
+    texto += [f"VALIDACIÓN: MALLA TOROIDAL 10x10 SIN VACÍOS, FORMULACIÓN FUERTE "
+              f"({len(nodos_tile)} plantas proporcionales a p_s, a[n1,SA] = 1)",
+              "Plantas por especie: " + ", ".join(f"{s} {v}" for s, v in n_tile.items()),
               f"Relajación LP: {milp['lp']:.4f}",
               f"MILP (CBC, límite {tiempo_milp} s): estado {milp['estado']}, {milp['tiempo']:.0f} s, "
               f"mejor valor {milp['valor']:.4f} (verificado {milp['valor_verificado']:.4f}), "
@@ -498,8 +469,8 @@ def ejecutar_paso4(W, prop_base, nodos_plano, aristas_plano, nodos_tile, aristas
     guardar_solucion(nodos_ha, sa["asig"], mejor["fijo"], W.index, carpeta / "solucion_1ha.csv")
     texto += ["Archivos: solucion_1ha.csv (malla toroidal), modelo_tile.gms, milp_tile.log, "
               "convergencia_recocido.png, mapa_1ha.png, mapa_zoom.png, boxplot_escenarios.png, "
-              "resultados_paso4_v2.txt"]
+              "resultados_paso4_v3.txt"]
 
     resumen = "\n".join(texto)
-    (carpeta / "resultados_paso4_v2.txt").write_text(resumen + "\n", encoding="utf-8")
+    (carpeta / "resultados_paso4_v3.txt").write_text(resumen + "\n", encoding="utf-8")
     return resumen

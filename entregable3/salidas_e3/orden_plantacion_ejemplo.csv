@@ -1,0 +1,659 @@
+﻿orden,fila,columna,x_m,y_m,especie,existente,accion,planta_nueva
+1,1,1,0.0,0.0,OS,no,plantar,1
+2,1,2,4.19,0.0,SA,no,plantar,2
+3,1,3,8.38,0.0,ST,sí,existente – no se planta,
+4,1,4,12.57,0.0,OR,no,plantar,3
+5,1,5,16.76,0.0,SA,sí,existente – no se planta,
+6,1,6,20.95,0.0,LE,no,plantar,4
+7,1,7,25.13,0.0,OR,no,plantar,5
+8,1,8,29.32,0.0,LE,no,plantar,6
+9,1,9,33.51,0.0,OS,no,plantar,7
+10,1,10,37.7,0.0,SC,no,plantar,8
+11,1,11,41.89,0.0,PL,sí,existente – no se planta,
+12,1,12,46.08,0.0,OS,no,plantar,9
+13,1,13,50.27,0.0,SA,no,plantar,10
+14,1,14,54.46,0.0,PL,no,plantar,11
+15,1,15,58.65,0.0,OE,no,plantar,12
+16,1,16,62.84,0.0,SA,no,plantar,13
+17,1,17,67.03,0.0,PL,no,plantar,14
+18,1,18,71.21,0.0,SC,sí,existente – no se planta,
+19,1,19,75.4,0.0,OR,sí,existente – no se planta,
+20,1,20,79.59,0.0,YF,no,plantar,15
+21,1,21,83.78,0.0,OC,no,plantar,16
+22,1,22,87.97,0.0,SA,no,plantar,17
+23,1,23,92.16,0.0,SA,no,plantar,18
+24,1,24,96.35,0.0,OR,no,plantar,19
+25,1,25,100.54,0.0,ST,no,plantar,20
+26,1,26,104.73,0.0,SA,no,plantar,21
+27,1,27,108.92,0.0,SA,no,plantar,22
+28,1,28,113.11,0.0,OS,no,plantar,23
+29,1,29,117.3,0.0,YF,no,plantar,24
+30,1,30,121.48,0.0,SA,sí,existente – no se planta,
+31,1,31,125.67,0.0,OS,no,plantar,25
+32,1,32,129.86,0.0,YF,no,plantar,26
+33,1,33,134.05,0.0,SA,no,plantar,27
+34,1,34,138.24,0.0,OR,no,plantar,28
+35,1,35,142.43,0.0,SA,no,plantar,29
+36,1,36,146.62,0.0,OR,no,plantar,30
+37,1,37,150.81,0.0,SA,no,plantar,31
+38,1,38,155.0,0.0,LE,no,plantar,32
+39,1,39,159.19,0.0,OR,no,plantar,33
+40,1,40,163.38,0.0,SA,no,plantar,34
+41,1,41,167.56,0.0,OE,no,plantar,35
+42,1,42,171.75,0.0,PL,no,plantar,36
+43,1,43,175.94,0.0,OS,no,plantar,37
+44,1,44,180.13,0.0,SA,no,plantar,38
+45,1,45,184.32,0.0,OC,no,plantar,39
+46,1,46,188.51,0.0,SA,no,plantar,40
+47,1,47,192.7,0.0,YF,no,plantar,41
+48,2,47,194.79,3.63,SA,no,plantar,42
+49,2,46,190.6,3.63,OC,no,plantar,43
+50,2,45,186.42,3.63,YF,no,plantar,44
+51,2,44,182.23,3.63,SA,no,plantar,45
+52,2,43,178.04,3.63,PL,sí,existente – no se planta,
+53,2,42,173.85,3.63,SA,sí,existente – no se planta,
+54,2,41,169.66,3.63,SC,no,plantar,46
+55,2,40,165.47,3.63,PL,no,plantar,47
+56,2,39,161.28,3.63,OS,no,plantar,48
+57,2,38,157.09,3.63,SA,no,plantar,49
+58,2,37,152.9,3.63,OR,sí,existente – no se planta,
+59,2,36,148.71,3.63,LE,no,plantar,50
+60,2,35,144.52,3.63,ST,sí,existente – no se planta,
+61,2,34,140.34,3.63,ST,sí,existente – no se planta,
+62,2,33,136.15,3.63,LE,no,plantar,51
+63,2,32,131.96,3.63,OS,no,plantar,52
+64,2,31,127.77,3.63,SA,no,plantar,53
+65,2,30,123.58,3.63,YF,no,plantar,54
+66,2,29,119.39,3.63,OS,no,plantar,55
+67,2,28,115.2,3.63,SA,no,plantar,56
+68,2,27,111.01,3.63,YF,no,plantar,57
+69,2,26,106.82,3.63,OC,no,plantar,58
+70,2,25,102.63,3.63,OR,sí,existente – no se planta,
+71,2,24,98.44,3.63,SA,no,plantar,59
+72,2,23,94.25,3.63,ST,no,plantar,60
+73,2,22,90.07,3.63,OR,sí,existente – no se planta,
+74,2,21,85.88,3.63,LE,no,plantar,61
+75,2,20,81.69,3.63,SA,no,plantar,62
+76,2,19,77.5,3.63,OS,no,plantar,63
+77,2,18,73.31,3.63,PL,sí,existente – no se planta,
+78,2,17,69.12,3.63,OE,no,plantar,64
+79,2,16,64.93,3.63,SC,no,plantar,65
+80,2,15,60.74,3.63,PL,no,plantar,66
+81,2,14,56.55,3.63,SA,no,plantar,67
+82,2,13,52.36,3.63,OC,no,plantar,68
+83,2,12,48.17,3.63,SA,sí,existente – no se planta,
+84,2,11,43.99,3.63,LE,sí,existente – no se planta,
+85,2,10,39.8,3.63,OE,no,plantar,69
+86,2,9,35.61,3.63,PL,no,plantar,70
+87,2,8,31.42,3.63,SA,no,plantar,71
+88,2,7,27.23,3.63,OC,no,plantar,72
+89,2,6,23.04,3.63,SA,sí,existente – no se planta,
+90,2,5,18.85,3.63,OR,no,plantar,73
+91,2,4,14.66,3.63,LE,no,plantar,74
+92,2,3,10.47,3.63,SA,no,plantar,75
+93,2,2,6.28,3.63,OR,no,plantar,76
+94,2,1,2.09,3.63,LE,no,plantar,77
+95,3,1,0.0,7.26,OC,no,plantar,78
+96,3,2,4.19,7.26,SA,no,plantar,79
+97,3,3,8.38,7.26,ST,sí,existente – no se planta,
+98,3,4,12.57,7.26,OR,no,plantar,80
+99,3,5,16.76,7.26,SA,sí,existente – no se planta,
+100,3,6,20.95,7.26,ST,no,plantar,81
+101,3,7,25.13,7.26,SA,sí,existente – no se planta,
+102,3,8,29.32,7.26,PL,sí,existente – no se planta,
+103,3,9,33.51,7.26,OE,no,plantar,82
+104,3,10,37.7,7.26,SC,no,plantar,83
+105,3,11,41.89,7.26,PL,no,plantar,84
+106,3,12,46.08,7.26,OR,no,plantar,85
+107,3,13,50.27,7.26,LE,no,plantar,86
+108,3,14,54.46,7.26,OR,no,plantar,87
+109,3,15,58.65,7.26,SA,no,plantar,88
+110,3,16,62.84,7.26,OS,no,plantar,89
+111,3,17,67.03,7.26,PL,sí,existente – no se planta,
+112,3,18,71.21,7.26,LE,sí,existente – no se planta,
+113,3,19,75.4,7.26,SA,no,plantar,90
+114,3,20,79.59,7.26,YF,no,plantar,91
+115,3,21,83.78,7.26,OS,no,plantar,92
+116,3,22,87.97,7.26,SA,no,plantar,93
+117,3,23,92.16,7.26,SA,no,plantar,94
+118,3,24,96.35,7.26,OC,no,plantar,95
+119,3,25,100.54,7.26,LE,no,plantar,96
+120,3,26,104.73,7.26,SA,no,plantar,97
+121,3,27,108.92,7.26,SA,no,plantar,98
+122,3,28,113.11,7.26,OC,no,plantar,99
+123,3,29,117.3,7.26,YF,no,plantar,100
+124,3,30,121.48,7.26,ST,sí,existente – no se planta,
+125,3,31,125.67,7.26,OC,sí,existente – no se planta,
+126,3,32,129.86,7.26,YF,no,plantar,101
+127,3,33,134.05,7.26,SA,no,plantar,102
+128,3,34,138.24,7.26,OR,no,plantar,103
+129,3,35,142.43,7.26,SA,no,plantar,104
+130,3,36,146.62,7.26,OE,sí,existente – no se planta,
+131,3,37,150.81,7.26,SA,no,plantar,105
+132,3,38,155.0,7.26,ST,no,plantar,106
+133,3,39,159.19,7.26,PL,no,plantar,107
+134,3,40,163.38,7.26,SA,no,plantar,108
+135,3,41,167.56,7.26,OE,no,plantar,109
+136,3,42,171.75,7.26,PL,no,plantar,110
+137,3,43,175.94,7.26,SC,no,plantar,111
+138,3,44,180.13,7.26,OS,no,plantar,112
+139,3,45,184.32,7.26,OC,no,plantar,113
+140,3,46,188.51,7.26,SA,no,plantar,114
+141,3,47,192.7,7.26,SA,sí,existente – no se planta,
+142,4,47,194.79,10.88,SA,no,plantar,115
+143,4,46,190.6,10.88,OC,no,plantar,116
+144,4,45,186.42,10.88,PL,sí,existente – no se planta,
+145,4,44,182.23,10.88,SA,no,plantar,117
+146,4,43,178.04,10.88,PL,no,plantar,118
+147,4,42,173.85,10.88,OR,sí,existente – no se planta,
+148,4,41,169.66,10.88,SC,no,plantar,119
+149,4,40,165.47,10.88,PL,no,plantar,120
+150,4,39,161.28,10.88,OS,sí,existente – no se planta,
+151,4,38,157.09,10.88,SA,no,plantar,121
+152,4,37,152.9,10.88,OR,no,plantar,122
+153,4,36,148.71,10.88,ST,no,plantar,123
+154,4,35,144.52,10.88,YF,no,plantar,124
+155,4,34,140.34,10.88,OC,no,plantar,125
+156,4,33,136.15,10.88,SA,no,plantar,126
+157,4,32,131.96,10.88,OC,no,plantar,127
+158,4,31,127.77,10.88,SA,sí,existente – no se planta,
+159,4,30,123.58,10.88,OR,no,plantar,128
+160,4,29,119.39,10.88,OC,no,plantar,129
+161,4,28,115.2,10.88,SA,sí,existente – no se planta,
+162,4,27,111.01,10.88,LE,no,plantar,130
+163,4,26,106.82,10.88,OR,no,plantar,131
+164,4,25,102.63,10.88,SA,no,plantar,132
+165,4,24,98.44,10.88,OR,sí,existente – no se planta,
+166,4,23,94.25,10.88,ST,no,plantar,133
+167,4,22,90.07,10.88,OS,no,plantar,134
+168,4,21,85.88,10.88,PL,no,plantar,135
+169,4,20,81.69,10.88,SA,no,plantar,136
+170,4,19,77.5,10.88,OS,no,plantar,137
+171,4,18,73.31,10.88,ST,no,plantar,138
+172,4,17,69.12,10.88,OR,sí,existente – no se planta,
+173,4,16,64.93,10.88,SA,no,plantar,139
+174,4,15,60.74,10.88,OR,sí,existente – no se planta,
+175,4,14,56.55,10.88,LE,no,plantar,140
+176,4,13,52.36,10.88,SA,sí,existente – no se planta,
+177,4,12,48.17,10.88,ST,no,plantar,141
+178,4,11,43.99,10.88,OS,no,plantar,142
+179,4,10,39.8,10.88,SA,no,plantar,143
+180,4,9,35.61,10.88,PL,no,plantar,144
+181,4,8,31.42,10.88,SC,no,plantar,145
+182,4,7,27.23,10.88,OE,no,plantar,146
+183,4,6,23.04,10.88,PL,no,plantar,147
+184,4,5,18.85,10.88,OS,no,plantar,148
+185,4,4,14.66,10.88,LE,sí,existente – no se planta,
+186,4,3,10.47,10.88,SA,no,plantar,149
+187,4,2,6.28,10.88,OC,sí,existente – no se planta,
+188,4,1,2.09,10.88,OR,no,plantar,150
+189,5,1,0.0,14.51,SA,sí,existente – no se planta,
+190,5,2,4.19,14.51,SA,no,plantar,151
+191,5,3,8.38,14.51,OR,no,plantar,152
+192,5,4,12.57,14.51,ST,sí,existente – no se planta,
+193,5,5,16.76,14.51,PL,no,plantar,153
+194,5,6,20.95,14.51,SC,no,plantar,154
+195,5,7,25.13,14.51,SA,no,plantar,155
+196,5,8,29.32,14.51,PL,no,plantar,156
+197,5,9,33.51,14.51,SA,no,plantar,157
+198,5,10,37.7,14.51,OS,no,plantar,158
+199,5,11,41.89,14.51,ST,sí,existente – no se planta,
+200,5,12,46.08,14.51,SA,no,plantar,159
+201,5,13,50.27,14.51,OR,no,plantar,160
+202,5,14,54.46,14.51,OC,no,plantar,161
+203,5,15,58.65,14.51,SA,no,plantar,162
+204,5,16,62.84,14.51,LE,no,plantar,163
+205,5,17,67.03,14.51,ST,no,plantar,164
+206,5,18,71.21,14.51,OC,no,plantar,165
+207,5,19,75.4,14.51,SA,no,plantar,166
+208,5,20,79.59,14.51,PL,no,plantar,167
+209,5,21,83.78,14.51,OE,no,plantar,168
+210,5,22,87.97,14.51,SC,no,plantar,169
+211,5,23,92.16,14.51,PL,no,plantar,170
+212,5,24,96.35,14.51,SA,sí,existente – no se planta,
+213,5,25,100.54,14.51,OC,no,plantar,171
+214,5,26,104.73,14.51,LE,no,plantar,172
+215,5,27,108.92,14.51,SA,no,plantar,173
+216,5,28,113.11,14.51,OR,no,plantar,174
+217,5,29,117.3,14.51,ST,sí,existente – no se planta,
+218,5,30,121.48,14.51,SA,no,plantar,175
+219,5,31,125.67,14.51,LE,no,plantar,176
+220,5,32,129.86,14.51,SA,no,plantar,177
+221,5,33,134.05,14.51,OR,no,plantar,178
+222,5,34,138.24,14.51,LE,no,plantar,179
+223,5,35,142.43,14.51,SA,no,plantar,180
+224,5,36,146.62,14.51,OS,no,plantar,181
+225,5,37,150.81,14.51,SA,no,plantar,182
+226,5,38,155.0,14.51,OC,no,plantar,183
+227,5,39,159.19,14.51,PL,no,plantar,184
+228,5,40,163.38,14.51,SC,no,plantar,185
+229,5,41,167.56,14.51,OE,sí,existente – no se planta,
+230,5,42,171.75,14.51,PL,no,plantar,186
+231,5,43,175.94,14.51,SC,no,plantar,187
+232,5,44,180.13,14.51,OS,no,plantar,188
+233,5,45,184.32,14.51,SA,sí,existente – no se planta,
+234,5,46,188.51,14.51,SA,no,plantar,189
+235,5,47,192.7,14.51,OR,no,plantar,190
+236,6,47,194.79,18.14,SA,no,plantar,191
+237,6,46,190.6,18.14,ST,no,plantar,192
+238,6,45,186.42,18.14,OR,no,plantar,193
+239,6,44,182.23,18.14,SA,no,plantar,194
+240,6,43,178.04,18.14,PL,no,plantar,195
+241,6,42,173.85,18.14,OE,no,plantar,196
+242,6,41,169.66,18.14,SC,no,plantar,197
+243,6,40,165.47,18.14,PL,no,plantar,198
+244,6,39,161.28,18.14,OE,no,plantar,199
+245,6,38,157.09,18.14,SA,no,plantar,200
+246,6,37,152.9,18.14,SC,sí,existente – no se planta,
+247,6,36,148.71,18.14,PL,no,plantar,201
+248,6,35,144.52,18.14,SA,no,plantar,202
+249,6,34,140.34,18.14,OR,no,plantar,203
+250,6,33,136.15,18.14,SA,no,plantar,204
+251,6,32,131.96,18.14,ST,no,plantar,205
+252,6,31,127.77,18.14,OC,no,plantar,206
+253,6,30,123.58,18.14,OR,no,plantar,207
+254,6,29,119.39,18.14,SA,sí,existente – no se planta,
+255,6,28,115.2,18.14,SA,no,plantar,208
+256,6,27,111.01,18.14,LE,no,plantar,209
+257,6,26,106.82,18.14,OR,no,plantar,210
+258,6,25,102.63,18.14,SA,no,plantar,211
+259,6,24,98.44,18.14,PL,sí,existente – no se planta,
+260,6,23,94.25,18.14,SA,no,plantar,212
+261,6,22,90.07,18.14,OE,no,plantar,213
+262,6,21,85.88,18.14,PL,no,plantar,214
+263,6,20,81.69,18.14,SC,no,plantar,215
+264,6,19,77.5,18.14,OS,no,plantar,216
+265,6,18,73.31,18.14,YF,sí,existente – no se planta,
+266,6,17,69.12,18.14,SA,sí,existente – no se planta,
+267,6,16,64.93,18.14,YF,sí,existente – no se planta,
+268,6,15,60.74,18.14,OC,no,plantar,217
+269,6,14,56.55,18.14,YF,sí,existente – no se planta,
+270,6,13,52.36,18.14,SA,sí,existente – no se planta,
+271,6,12,48.17,18.14,ST,no,plantar,218
+272,6,11,43.99,18.14,OR,no,plantar,219
+273,6,10,39.8,18.14,SA,no,plantar,220
+274,6,9,35.61,18.14,SA,no,plantar,221
+275,6,8,31.42,18.14,OS,no,plantar,222
+276,6,7,27.23,18.14,SC,no,plantar,223
+277,6,6,23.04,18.14,PL,no,plantar,224
+278,6,5,18.85,18.14,OC,sí,existente – no se planta,
+279,6,4,14.66,18.14,SA,no,plantar,225
+280,6,3,10.47,18.14,LE,no,plantar,226
+281,6,2,6.28,18.14,ST,no,plantar,227
+282,6,1,2.09,18.14,OR,no,plantar,228
+283,7,1,0.0,21.77,ST,no,plantar,229
+284,7,2,4.19,21.77,SA,no,plantar,230
+285,7,3,8.38,21.77,SA,no,plantar,231
+286,7,4,12.57,21.77,OS,no,plantar,232
+287,7,5,16.76,21.77,PL,no,plantar,233
+288,7,6,20.95,21.77,SC,sí,existente – no se planta,
+289,7,7,25.13,21.77,OE,no,plantar,234
+290,7,8,29.32,21.77,PL,no,plantar,235
+291,7,9,33.51,21.77,ST,sí,existente – no se planta,
+292,7,10,37.7,21.77,PL,sí,existente – no se planta,
+293,7,11,41.89,21.77,LE,no,plantar,236
+294,7,12,46.08,21.77,SA,sí,existente – no se planta,
+295,7,13,50.27,21.77,OR,no,plantar,237
+296,7,14,54.46,21.77,OC,no,plantar,238
+297,7,15,58.65,21.77,SA,no,plantar,239
+298,7,16,62.84,21.77,SA,no,plantar,240
+299,7,17,67.03,21.77,OR,no,plantar,241
+300,7,18,71.21,21.77,OC,no,plantar,242
+301,7,19,75.4,21.77,SA,no,plantar,243
+302,7,20,79.59,21.77,PL,no,plantar,244
+303,7,21,83.78,21.77,OE,no,plantar,245
+304,7,22,87.97,21.77,SA,no,plantar,246
+305,7,23,92.16,21.77,YF,no,plantar,247
+306,7,24,96.35,21.77,OS,no,plantar,248
+307,7,25,100.54,21.77,SA,no,plantar,249
+308,7,26,104.73,21.77,OS,sí,existente – no se planta,
+309,7,27,108.92,21.77,SA,no,plantar,250
+310,7,28,113.11,21.77,OR,no,plantar,251
+311,7,29,117.3,21.77,PL,sí,existente – no se planta,
+312,7,30,121.48,21.77,SA,sí,existente – no se planta,
+313,7,31,125.67,21.77,YF,no,plantar,252
+314,7,32,129.86,21.77,SA,no,plantar,253
+315,7,33,134.05,21.77,OR,sí,existente – no se planta,
+316,7,34,138.24,21.77,SA,no,plantar,254
+317,7,35,142.43,21.77,ST,no,plantar,255
+318,7,36,146.62,21.77,OS,no,plantar,256
+319,7,37,150.81,21.77,SA,no,plantar,257
+320,7,38,155.0,21.77,OS,sí,existente – no se planta,
+321,7,39,159.19,21.77,PL,no,plantar,258
+322,7,40,163.38,21.77,SC,no,plantar,259
+323,7,41,167.56,21.77,OE,no,plantar,260
+324,7,42,171.75,21.77,PL,no,plantar,261
+325,7,43,175.94,21.77,SC,no,plantar,262
+326,7,44,180.13,21.77,OS,no,plantar,263
+327,7,45,184.32,21.77,LE,no,plantar,264
+328,7,46,188.51,21.77,SA,no,plantar,265
+329,7,47,192.7,21.77,OR,no,plantar,266
+330,8,47,194.79,25.4,SA,no,plantar,267
+331,8,46,190.6,25.4,SA,sí,existente – no se planta,
+332,8,45,186.42,25.4,OC,sí,existente – no se planta,
+333,8,44,182.23,25.4,SA,no,plantar,268
+334,8,43,178.04,25.4,PL,no,plantar,269
+335,8,42,173.85,25.4,OE,no,plantar,270
+336,8,41,169.66,25.4,SC,sí,existente – no se planta,
+337,8,40,165.47,25.4,PL,no,plantar,271
+338,8,39,161.28,25.4,OS,no,plantar,272
+339,8,38,157.09,25.4,SA,no,plantar,273
+340,8,37,152.9,25.4,OR,no,plantar,274
+341,8,36,148.71,25.4,LE,no,plantar,275
+342,8,35,144.52,25.4,SA,no,plantar,276
+343,8,34,140.34,25.4,OR,no,plantar,277
+344,8,33,136.15,25.4,SA,no,plantar,278
+345,8,32,131.96,25.4,OC,sí,existente – no se planta,
+346,8,31,127.77,25.4,OE,sí,existente – no se planta,
+347,8,30,123.58,25.4,SA,no,plantar,279
+348,8,29,119.39,25.4,PL,sí,existente – no se planta,
+349,8,28,115.2,25.4,SA,no,plantar,280
+350,8,27,111.01,25.4,OC,no,plantar,281
+351,8,26,106.82,25.4,SA,sí,existente – no se planta,
+352,8,25,102.63,25.4,OR,no,plantar,282
+353,8,24,98.44,25.4,LE,no,plantar,283
+354,8,23,94.25,25.4,SA,no,plantar,284
+355,8,22,90.07,25.4,OR,sí,existente – no se planta,
+356,8,21,85.88,25.4,LE,no,plantar,285
+357,8,20,81.69,25.4,SA,no,plantar,286
+358,8,19,77.5,25.4,OE,no,plantar,287
+359,8,18,73.31,25.4,PL,no,plantar,288
+360,8,17,69.12,25.4,SA,sí,existente – no se planta,
+361,8,16,64.93,25.4,ST,no,plantar,289
+362,8,15,60.74,25.4,OC,no,plantar,290
+363,8,14,56.55,25.4,SA,no,plantar,291
+364,8,13,52.36,25.4,SA,no,plantar,292
+365,8,12,48.17,25.4,SA,no,plantar,293
+366,8,11,43.99,25.4,OR,sí,existente – no se planta,
+367,8,10,39.8,25.4,SA,no,plantar,294
+368,8,9,35.61,25.4,OS,no,plantar,295
+369,8,8,31.42,25.4,SA,sí,existente – no se planta,
+370,8,7,27.23,25.4,SA,no,plantar,296
+371,8,6,23.04,25.4,PL,no,plantar,297
+372,8,5,18.85,25.4,OS,no,plantar,298
+373,8,4,14.66,25.4,SA,no,plantar,299
+374,8,3,10.47,25.4,YF,no,plantar,300
+375,8,2,6.28,25.4,OS,no,plantar,301
+376,8,1,2.09,25.4,PL,no,plantar,302
+377,9,1,0.0,29.02,OE,sí,existente – no se planta,
+378,9,2,4.19,29.02,SA,no,plantar,303
+379,9,3,8.38,29.02,SA,no,plantar,304
+380,9,4,12.57,29.02,OC,no,plantar,305
+381,9,5,16.76,29.02,OR,sí,existente – no se planta,
+382,9,6,20.95,29.02,SA,no,plantar,306
+383,9,7,25.13,29.02,OS,no,plantar,307
+384,9,8,29.32,29.02,OC,no,plantar,308
+385,9,9,33.51,29.02,SA,no,plantar,309
+386,9,10,37.7,29.02,PL,no,plantar,310
+387,9,11,41.89,29.02,SC,no,plantar,311
+388,9,12,46.08,29.02,PL,sí,existente – no se planta,
+389,9,13,50.27,29.02,OC,no,plantar,312
+390,9,14,54.46,29.02,ST,no,plantar,313
+391,9,15,58.65,29.02,OR,sí,existente – no se planta,
+392,9,16,62.84,29.02,SA,no,plantar,314
+393,9,17,67.03,29.02,PL,no,plantar,315
+394,9,18,71.21,29.02,OE,no,plantar,316
+395,9,19,75.4,29.02,SC,no,plantar,317
+396,9,20,79.59,29.02,PL,no,plantar,318
+397,9,21,83.78,29.02,OS,no,plantar,319
+398,9,22,87.97,29.02,SA,sí,existente – no se planta,
+399,9,23,92.16,29.02,LE,no,plantar,320
+400,9,24,96.35,29.02,OR,no,plantar,321
+401,9,25,100.54,29.02,SA,no,plantar,322
+402,9,26,104.73,29.02,SC,sí,existente – no se planta,
+403,9,27,108.92,29.02,PL,no,plantar,323
+404,9,28,113.11,29.02,SA,no,plantar,324
+405,9,29,117.3,29.02,OS,sí,existente – no se planta,
+406,9,30,121.48,29.02,OR,sí,existente – no se planta,
+407,9,31,125.67,29.02,YF,no,plantar,325
+408,9,32,129.86,29.02,SA,no,plantar,326
+409,9,33,134.05,29.02,OR,no,plantar,327
+410,9,34,138.24,29.02,SA,sí,existente – no se planta,
+411,9,35,142.43,29.02,LE,no,plantar,328
+412,9,36,146.62,29.02,OR,no,plantar,329
+413,9,37,150.81,29.02,SA,no,plantar,330
+414,9,38,155.0,29.02,ST,sí,existente – no se planta,
+415,9,39,159.19,29.02,OR,no,plantar,331
+416,9,40,163.38,29.02,SA,no,plantar,332
+417,9,41,167.56,29.02,OS,no,plantar,333
+418,9,42,171.75,29.02,PL,no,plantar,334
+419,9,43,175.94,29.02,SC,no,plantar,335
+420,9,44,180.13,29.02,OS,no,plantar,336
+421,9,45,184.32,29.02,SA,sí,existente – no se planta,
+422,9,46,188.51,29.02,SA,sí,existente – no se planta,
+423,9,47,192.7,29.02,PL,no,plantar,337
+424,10,47,194.79,32.65,SC,no,plantar,338
+425,10,46,190.6,32.65,OE,no,plantar,339
+426,10,45,186.42,32.65,PL,sí,existente – no se planta,
+427,10,44,182.23,32.65,SA,no,plantar,340
+428,10,43,178.04,32.65,PL,no,plantar,341
+429,10,42,173.85,32.65,OS,no,plantar,342
+430,10,41,169.66,32.65,SA,no,plantar,343
+431,10,40,165.47,32.65,OR,no,plantar,344
+432,10,39,161.28,32.65,ST,no,plantar,345
+433,10,38,157.09,32.65,SA,no,plantar,346
+434,10,37,152.9,32.65,OR,sí,existente – no se planta,
+435,10,36,148.71,32.65,LE,no,plantar,347
+436,10,35,144.52,32.65,SA,no,plantar,348
+437,10,34,140.34,32.65,OR,no,plantar,349
+438,10,33,136.15,32.65,OC,no,plantar,350
+439,10,32,131.96,32.65,LE,sí,existente – no se planta,
+440,10,31,127.77,32.65,SA,no,plantar,351
+441,10,30,123.58,32.65,OC,no,plantar,352
+442,10,29,119.39,32.65,SA,no,plantar,353
+443,10,28,115.2,32.65,PL,no,plantar,354
+444,10,27,111.01,32.65,OS,no,plantar,355
+445,10,26,106.82,32.65,SA,sí,existente – no se planta,
+446,10,25,102.63,32.65,OR,no,plantar,356
+447,10,24,98.44,32.65,LE,no,plantar,357
+448,10,23,94.25,32.65,SA,no,plantar,358
+449,10,22,90.07,32.65,OS,no,plantar,359
+450,10,21,85.88,32.65,PL,no,plantar,360
+451,10,20,81.69,32.65,SC,sí,existente – no se planta,
+452,10,19,77.5,32.65,OE,no,plantar,361
+453,10,18,73.31,32.65,PL,no,plantar,362
+454,10,17,69.12,32.65,SC,no,plantar,363
+455,10,16,64.93,32.65,OE,no,plantar,364
+456,10,15,60.74,32.65,YF,no,plantar,365
+457,10,14,56.55,32.65,SA,no,plantar,366
+458,10,13,52.36,32.65,OS,sí,existente – no se planta,
+459,10,12,48.17,32.65,SA,no,plantar,367
+460,10,11,43.99,32.65,PL,sí,existente – no se planta,
+461,10,10,39.8,32.65,OS,no,plantar,368
+462,10,9,35.61,32.65,LE,sí,existente – no se planta,
+463,10,8,31.42,32.65,LE,sí,existente – no se planta,
+464,10,7,27.23,32.65,PL,sí,existente – no se planta,
+465,10,6,23.04,32.65,ST,no,plantar,369
+466,10,5,18.85,32.65,OC,no,plantar,370
+467,10,4,14.66,32.65,SA,no,plantar,371
+468,10,3,10.47,32.65,YF,no,plantar,372
+469,10,2,6.28,32.65,OS,no,plantar,373
+470,10,1,2.09,32.65,PL,no,plantar,374
+471,11,1,0.0,36.28,OE,no,plantar,375
+472,11,2,4.19,36.28,SA,no,plantar,376
+473,11,3,8.38,36.28,SA,no,plantar,377
+474,11,4,12.57,36.28,OC,no,plantar,378
+475,11,5,16.76,36.28,SC,sí,existente – no se planta,
+476,11,6,20.95,36.28,SA,sí,existente – no se planta,
+477,11,7,25.13,36.28,OS,no,plantar,379
+478,11,8,29.32,36.28,ST,no,plantar,380
+479,11,9,33.51,36.28,OS,no,plantar,381
+480,11,10,37.7,36.28,SC,sí,existente – no se planta,
+481,11,11,41.89,36.28,SA,no,plantar,382
+482,11,12,46.08,36.28,OS,no,plantar,383
+483,11,13,50.27,36.28,SA,no,plantar,384
+484,11,14,54.46,36.28,PL,no,plantar,385
+485,11,15,58.65,36.28,OS,no,plantar,386
+486,11,16,62.84,36.28,SA,no,plantar,387
+487,11,17,67.03,36.28,PL,sí,existente – no se planta,
+488,11,18,71.21,36.28,OC,sí,existente – no se planta,
+489,11,19,75.4,36.28,SC,no,plantar,388
+490,11,20,79.59,36.28,PL,no,plantar,389
+491,11,21,83.78,36.28,OE,no,plantar,390
+492,11,22,87.97,36.28,SC,no,plantar,391
+493,11,23,92.16,36.28,PL,no,plantar,392
+494,11,24,96.35,36.28,OS,no,plantar,393
+495,11,25,100.54,36.28,ST,no,plantar,394
+496,11,26,104.73,36.28,SA,no,plantar,395
+497,11,27,108.92,36.28,LE,sí,existente – no se planta,
+498,11,28,113.11,36.28,SC,sí,existente – no se planta,
+499,11,29,117.3,36.28,OS,no,plantar,396
+500,11,30,121.48,36.28,SA,no,plantar,397
+501,11,31,125.67,36.28,ST,no,plantar,398
+502,11,32,129.86,36.28,OR,no,plantar,399
+503,11,33,134.05,36.28,SA,no,plantar,400
+504,11,34,138.24,36.28,SA,no,plantar,401
+505,11,35,142.43,36.28,LE,no,plantar,402
+506,11,36,146.62,36.28,OR,no,plantar,403
+507,11,37,150.81,36.28,SA,no,plantar,404
+508,11,38,155.0,36.28,ST,no,plantar,405
+509,11,39,159.19,36.28,OC,no,plantar,406
+510,11,40,163.38,36.28,SA,no,plantar,407
+511,11,41,167.56,36.28,LE,no,plantar,408
+512,11,42,171.75,36.28,OR,no,plantar,409
+513,11,43,175.94,36.28,ST,sí,existente – no se planta,
+514,11,44,180.13,36.28,SA,sí,existente – no se planta,
+515,11,45,184.32,36.28,OS,no,plantar,410
+516,11,46,188.51,36.28,SC,no,plantar,411
+517,11,47,192.7,36.28,PL,no,plantar,412
+518,12,47,194.79,39.91,SA,sí,existente – no se planta,
+519,12,46,190.6,39.91,OE,no,plantar,413
+520,12,45,186.42,39.91,PL,no,plantar,414
+521,12,44,182.23,39.91,OR,sí,existente – no se planta,
+522,12,43,178.04,39.91,SA,no,plantar,415
+523,12,42,173.85,39.91,ST,sí,existente – no se planta,
+524,12,41,169.66,39.91,SA,no,plantar,416
+525,12,40,165.47,39.91,OR,no,plantar,417
+526,12,39,161.28,39.91,SA,no,plantar,418
+527,12,38,157.09,39.91,OR,sí,existente – no se planta,
+528,12,37,152.9,39.91,OC,no,plantar,419
+529,12,36,148.71,39.91,ST,no,plantar,420
+530,12,35,144.52,39.91,SA,no,plantar,421
+531,12,34,140.34,39.91,OC,no,plantar,422
+532,12,33,136.15,39.91,OR,no,plantar,423
+533,12,32,131.96,39.91,ST,no,plantar,424
+534,12,31,127.77,39.91,SA,sí,existente – no se planta,
+535,12,30,123.58,39.91,OR,no,plantar,425
+536,12,29,119.39,39.91,LE,no,plantar,426
+537,12,28,115.2,39.91,SA,no,plantar,427
+538,12,27,111.01,39.91,OS,no,plantar,428
+539,12,26,106.82,39.91,PL,sí,existente – no se planta,
+540,12,25,102.63,39.91,OR,sí,existente – no se planta,
+541,12,24,98.44,39.91,SA,no,plantar,429
+542,12,23,94.25,39.91,SA,no,plantar,430
+543,12,22,90.07,39.91,OS,no,plantar,431
+544,12,21,85.88,39.91,PL,no,plantar,432
+545,12,20,81.69,39.91,SC,no,plantar,433
+546,12,19,77.5,39.91,OE,no,plantar,434
+547,12,18,73.31,39.91,PL,no,plantar,435
+548,12,17,69.12,39.91,SC,no,plantar,436
+549,12,16,64.93,39.91,OE,no,plantar,437
+550,12,15,60.74,39.91,PL,no,plantar,438
+551,12,14,56.55,39.91,SC,no,plantar,439
+552,12,13,52.36,39.91,OE,no,plantar,440
+553,12,12,48.17,39.91,PL,no,plantar,441
+554,12,11,43.99,39.91,SA,no,plantar,442
+555,12,10,39.8,39.91,OS,no,plantar,443
+556,12,9,35.61,39.91,PL,no,plantar,444
+557,12,8,31.42,39.91,SA,no,plantar,445
+558,12,7,27.23,39.91,SA,no,plantar,446
+559,12,6,23.04,39.91,YF,no,plantar,447
+560,12,5,18.85,39.91,OC,no,plantar,448
+561,12,4,14.66,39.91,SA,no,plantar,449
+562,12,3,10.47,39.91,ST,no,plantar,450
+563,12,2,6.28,39.91,OS,no,plantar,451
+564,12,1,2.09,39.91,PL,no,plantar,452
+565,13,1,0.0,43.53,OE,no,plantar,453
+566,13,2,4.19,43.53,SA,no,plantar,454
+567,13,3,8.38,43.53,SA,no,plantar,455
+568,13,4,12.57,43.53,OR,no,plantar,456
+569,13,5,16.76,43.53,YF,sí,existente – no se planta,
+570,13,6,20.95,43.53,SA,no,plantar,457
+571,13,7,25.13,43.53,OS,no,plantar,458
+572,13,8,29.32,43.53,PL,no,plantar,459
+573,13,9,33.51,43.53,OE,no,plantar,460
+574,13,10,37.7,43.53,SA,no,plantar,461
+575,13,11,41.89,43.53,SA,sí,existente – no se planta,
+576,13,12,46.08,43.53,OS,no,plantar,462
+577,13,13,50.27,43.53,SC,no,plantar,463
+578,13,14,54.46,43.53,PL,no,plantar,464
+579,13,15,58.65,43.53,OE,no,plantar,465
+580,13,16,62.84,43.53,SC,no,plantar,466
+581,13,17,67.03,43.53,PL,no,plantar,467
+582,13,18,71.21,43.53,OE,no,plantar,468
+583,13,19,75.4,43.53,SC,no,plantar,469
+584,13,20,79.59,43.53,PL,no,plantar,470
+585,13,21,83.78,43.53,OS,no,plantar,471
+586,13,22,87.97,43.53,SA,no,plantar,472
+587,13,23,92.16,43.53,ST,no,plantar,473
+588,13,24,96.35,43.53,OR,no,plantar,474
+589,13,25,100.54,43.53,LE,no,plantar,475
+590,13,26,104.73,43.53,SA,sí,existente – no se planta,
+591,13,27,108.92,43.53,SA,no,plantar,476
+592,13,28,113.11,43.53,YF,sí,existente – no se planta,
+593,13,29,117.3,43.53,OR,no,plantar,477
+594,13,30,121.48,43.53,SA,sí,existente – no se planta,
+595,13,31,125.67,43.53,OC,no,plantar,478
+596,13,32,129.86,43.53,OR,no,plantar,479
+597,13,33,134.05,43.53,SA,no,plantar,480
+598,13,34,138.24,43.53,SA,no,plantar,481
+599,13,35,142.43,43.53,YF,no,plantar,482
+600,13,36,146.62,43.53,OC,sí,existente – no se planta,
+601,13,37,150.81,43.53,SA,no,plantar,483
+602,13,38,155.0,43.53,ST,no,plantar,484
+603,13,39,159.19,43.53,OC,no,plantar,485
+604,13,40,163.38,43.53,SA,sí,existente – no se planta,
+605,13,41,167.56,43.53,OS,no,plantar,486
+606,13,42,171.75,43.53,PL,sí,existente – no se planta,
+607,13,43,175.94,43.53,OS,no,plantar,487
+608,13,44,180.13,43.53,PL,no,plantar,488
+609,13,45,184.32,43.53,SC,no,plantar,489
+610,13,46,188.51,43.53,SA,no,plantar,490
+611,13,47,192.7,43.53,PL,no,plantar,491
+612,14,47,194.79,47.16,SA,no,plantar,492
+613,14,46,190.6,47.16,OE,no,plantar,493
+614,14,45,186.42,47.16,PL,sí,existente – no se planta,
+615,14,44,182.23,47.16,OS,no,plantar,494
+616,14,43,178.04,47.16,SC,sí,existente – no se planta,
+617,14,42,173.85,47.16,SA,no,plantar,495
+618,14,41,169.66,47.16,SC,no,plantar,496
+619,14,40,165.47,47.16,PL,no,plantar,497
+620,14,39,161.28,47.16,LE,sí,existente – no se planta,
+621,14,38,157.09,47.16,SA,no,plantar,498
+622,14,37,152.9,47.16,OR,no,plantar,499
+623,14,36,148.71,47.16,LE,no,plantar,500
+624,14,35,144.52,47.16,SA,no,plantar,501
+625,14,34,140.34,47.16,OC,no,plantar,502
+626,14,33,136.15,47.16,LE,no,plantar,503
+627,14,32,131.96,47.16,OC,no,plantar,504
+628,14,31,127.77,47.16,SA,no,plantar,505
+629,14,30,123.58,47.16,YF,no,plantar,506
+630,14,29,119.39,47.16,OC,no,plantar,507
+631,14,28,115.2,47.16,SA,no,plantar,508
+632,14,27,111.01,47.16,ST,no,plantar,509
+633,14,26,106.82,47.16,OC,no,plantar,510
+634,14,25,102.63,47.16,OR,no,plantar,511
+635,14,24,98.44,47.16,SA,no,plantar,512
+636,14,23,94.25,47.16,OS,sí,existente – no se planta,
+637,14,22,90.07,47.16,OR,no,plantar,513
+638,14,21,85.88,47.16,LE,no,plantar,514
+639,14,20,81.69,47.16,SA,no,plantar,515
+640,14,19,77.5,47.16,OE,sí,existente – no se planta,
+641,14,18,73.31,47.16,PL,no,plantar,516
+642,14,17,69.12,47.16,SA,no,plantar,517
+643,14,16,64.93,47.16,OE,no,plantar,518
+644,14,15,60.74,47.16,PL,no,plantar,519
+645,14,14,56.55,47.16,SA,sí,existente – no se planta,
+646,14,13,52.36,47.16,OE,no,plantar,520
+647,14,12,48.17,47.16,PL,no,plantar,521
+648,14,11,43.99,47.16,SA,no,plantar,522
+649,14,10,39.8,47.16,OS,no,plantar,523
+650,14,9,35.61,47.16,PL,no,plantar,524
+651,14,8,31.42,47.16,SA,no,plantar,525
+652,14,7,27.23,47.16,SA,no,plantar,526
+653,14,6,23.04,47.16,ST,no,plantar,527
+654,14,5,18.85,47.16,OC,no,plantar,528
+655,14,4,14.66,47.16,SA,no,plantar,529
+656,14,3,10.47,47.16,OS,sí,existente – no se planta,
+657,14,2,6.28,47.16,OR,no,plantar,530
+658,14,1,2.09,47.16,YF,no,plantar,531

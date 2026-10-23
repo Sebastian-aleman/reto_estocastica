@@ -9,10 +9,11 @@ import competencia
 import datos
 import distribuciones
 import malla
+import recocido as rc
 import simulacion
 from test_reto import ejecutar_tests
 
-SEP = 3.4
+DENSIDAD_HA = 658          # plantas (= nodos) por ha; se puede cambiar a 568
 TIEMPO_MILP = 900
 SALIDAS = Path(__file__).parent / "salidas"
 
@@ -53,15 +54,23 @@ def main():
     print(f"\nAristas del grafo con W > 0.5: {G.number_of_edges()} de 45")
 
     # 3. Malla
-    nodos_ha, aristas_ha = malla.generar_malla_tresbolillo(100, 100, SEP)
+    sep = malla.separacion_tresbolillo(DENSIDAD_HA)
+    dy = sep * np.sqrt(3) / 2
+    nodos_ha, aristas_ha = malla.generar_malla_tresbolillo(100, 100, sep)
     malla.graficar_malla(nodos_ha, aristas_ha, SALIDAS / "malla_1ha.png")
-    dy = SEP * np.sqrt(3) / 2
-    nodos_tile, aristas_tile = malla.generar_malla_tresbolillo(10 * SEP, 10 * dy, SEP, toroidal=True)
+    nodos_toro, aristas_toro = malla.generar_malla_tresbolillo(100, 100, sep, toroidal=True)
+    n_col, n_fil = malla.dimensiones_toroide(100, 100, sep)
+    nodos_tile, aristas_tile = malla.generar_malla_tresbolillo(10 * sep, 10 * dy, sep, toroidal=True)
     malla.exportar_malla_gams(nodos_tile, aristas_tile, SALIDAS)
 
     titulo("3. Malla")
-    print(f"Malla 1 ha: {len(nodos_ha)} nodos")
-    print(f"Malla toroidal: {len(nodos_tile)} nodos, {len(aristas_tile)} aristas")
+    print(f"Densidad: {DENSIDAD_HA} plantas/ha -> separación sep = sqrt(2*10000 / (sqrt(3)*{DENSIDAD_HA})) "
+          f"= {sep:.4f} m (entre filas {dy:.4f} m)")
+    print(f"Malla plana 1 ha: {len(nodos_ha)} nodos")
+    print(f"Malla toroidal 1 ha: {n_col} x {n_fil} = {len(nodos_toro)} nodos, "
+          f"{len(nodos_toro) / (n_col * sep * n_fil * dy / 10000):.2f} nodos/ha, todos de grado "
+          f"{set(malla.grados(nodos_toro, aristas_toro).values())}")
+    print(f"Malla toroidal 10x10: {len(nodos_tile)} nodos, {len(aristas_tile)} aristas")
 
     # 4A. Plantas por ha
     plantas_por_ha = distribuciones.calcular_plantas_por_ha(plantas, areas)
@@ -138,8 +147,8 @@ def main():
 
     # 6. Acomodo espacial: recocido simulado vs líneas base
     titulo("6. Acomodo espacial en 1 ha: recocido simulado vs líneas base")
-    print(comparacion.ejecutar_paso4(W, prop_base, nodos_ha, aristas_ha, nodos_tile, aristas_tile,
-                                     SALIDAS, tiempo_milp=TIEMPO_MILP))
+    print(comparacion.ejecutar_paso4(W, prop_base, nodos_tile, aristas_tile, SALIDAS,
+                                     densidad_ha=DENSIDAD_HA, tiempo_milp=TIEMPO_MILP))
 
     # 7. Pruebas
     titulo("7. Pruebas")
@@ -162,18 +171,21 @@ def main():
         "Escenario 2: compra = ceil(necesidad / sup_1), sup_1 sorteada por especie y polígono.",
         f"Costo por ha = costo total / área total ({areas.sum():.2f} ha); presupuesto {datos.PRESUPUESTO_HA:,}/ha.",
         "Plan determinista: 524 plantas/ha x p_s; referencia sin descuento: 658/ha x p_s.",
-        "Acomodo en 1 ha: malla toroidal de 986 nodos (29 x 34, todos de grado 6) para evitar el efecto "
-        "de borde; 129 existentes (X_esperado redondeado) fijas al azar, 529 nuevas (ha_media de esc1 "
-        "redondeada) y 328 vacíos.",
-        "Competencia total = suma de W sobre aristas con ambos nodos ocupados; los vacíos aportan 0.",
-        "Línea base actual: secuencia de 21 plantas cíclica en 529 nodos libres equiespaciados por fila.",
-        "Recocido: arranca de una asignación aleatoria; intercambia el contenido de dos nodos movibles; "
-        "T0 tal que un empeoramiento medio se acepta con prob. 0.8; para tras 100 niveles sin mejora contados con T < 1% de T0.",
+        f"Malla sin vacíos: sep = sqrt(2*10000 / (sqrt(3)*{DENSIDAD_HA})) = {sep:.4f} m, así cada ha "
+        f"tiene exactamente {DENSIDAD_HA} posiciones.",
+        f"Acomodo en 1 ha: malla toroidal de {len(nodos_toro)} nodos ({n_col} x {n_fil}, filas par, "
+        f"todos de grado 6) para evitar el efecto de borde; existentes = {rc.TOTAL_EXISTENTES}/{DENSIDAD_HA} "
+        "de los nodos (reparto de X_esperado) fijas al azar y nuevas = el resto (reparto de ha_media de "
+        "esc1); todos los nodos ocupados.",
+        "Competencia total = suma de W sobre todas las aristas.",
+        "Línea base actual: secuencia de 21 plantas cíclica en todos los nodos libres, en orden de fila.",
+        "Recocido: arranca de una asignación aleatoria; el único movimiento es intercambiar las especies "
+        "de dos nodos nuevos; T0 tal que un empeoramiento medio se acepta con prob. 0.8; para tras 100 "
+        "niveles sin mejora contados con T < 1% de T0.",
         "Comparación justa: recocido con las cantidades de la línea base actual vs con cantidades p_s.",
         "Facilitación: W[PL,SC] = W[PL,YF] = -0.3 solo para optimizar; la competencia se mide con W.",
-        f"Validación: malla toroidal 10x10 con 66 plantas proporcionales a prop_base y 34 vacíos; MILP "
-        f"con formulación fuerte (vacío como especie, enlace por arista, x[n1,SA] = 1), CBC, "
-        f"límite {TIEMPO_MILP} s.",
+        f"Validación: malla toroidal 10x10 sin vacíos con 100 plantas proporcionales a prop_base; MILP "
+        f"con formulación fuerte (enlace por arista, a[n1,SA] = 1), CBC, límite {TIEMPO_MILP} s.",
     ]
     for i, supuesto in enumerate(supuestos, 1):
         print(f"{i:>2}. {supuesto}")

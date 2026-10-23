@@ -1,0 +1,20 @@
+{
+  "fecha": "2026-10-22T22:36:22",
+  "n_corridas": 1000,
+  "n_procesos": 5,
+  "semilla_maestra": 20261022,
+  "parametros_recocido": {
+    "alfa": 0.995,
+    "L": 2000,
+    "T_min": 0.001,
+    "max_sin_mejora": 100
+  },
+  "tiempo_total_s": 88.09298359999957,
+  "corridas_verificadas_con_piloto": 10,
+  "ejemplo": {
+    "corrida": 607,
+    "z_final": 743.8267177391704,
+    "mediana_z_final": 743.8204896650698,
+    "x_tot": 127
+  }
+}

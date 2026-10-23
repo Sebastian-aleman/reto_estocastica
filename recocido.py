@@ -1,8 +1,8 @@
-"""Recocido simulado para acomodar especies en la malla tresbolillo.
+"""Recocido simulado para acomodar especies en la malla tresbolillo toroidal.
 
-Representación: `asig` es un arreglo con la especie de cada nodo (0..9) o VACIO.
-Tiene un nodo ficticio al final, siempre vacío, que sirve para rellenar la lista
-de vecinos de los nodos del borde (que tienen menos de 6) sin usar condicionales.
+Representación: `asig` es un arreglo con la especie de cada nodo (0..9). No hay
+nodos vacíos: la malla tiene exactamente tantos nodos como plantas
+(existentes + nuevas) y todos tienen grado 6.
 """
 import math
 import random
@@ -20,9 +20,8 @@ except ImportError:
         return funcion if funcion is not None else (lambda f: f)
 
 N_ESPECIES = 10
-VACIO = N_ESPECIES
-TOTAL_EXISTENTES = 129
-TOTAL_NUEVAS = 529
+SIN_ASIGNAR = -1          # solo mientras se construye una asignación
+TOTAL_EXISTENTES = 129    # plantas existentes por ha
 SECUENCIA_ACTUAL = ["SA", "PL", "OS", "OR", "SC", "OC", "SA", "OE", "ST", "SA", "OE",
                     "PL", "SA", "OC", "LE", "SA", "OS", "YF", "SA", "OR", "PL"]
 
@@ -38,76 +37,75 @@ def redondear_a_total(valores, total):
     return enteros
 
 
-def cargar_cantidades(carpeta):
-    """Plantas existentes (129) y nuevas (529) por especie para 1 ha."""
+def cargar_cantidades(carpeta, n_nodos, densidad_ha):
+    """Plantas existentes y nuevas por especie para una malla de n_nodos.
+
+    Las existentes son 129 por ha, o sea 129/densidad_ha de los nodos; las nuevas
+    llenan el resto, así que existentes + nuevas = n_nodos (sin vacíos). El reparto
+    por especie sigue X_esperado (existentes) y ha_media de esc1 (nuevas).
+    """
     x_esperado = pd.read_csv(carpeta / "X_esperado.inc", sep=r"\s+", header=None,
                              index_col=0).iloc[:, 0]
     compras = pd.read_csv(carpeta / "compras_esperadas.csv")
     ha_media = compras[compras["escenario"] == "esc1"].set_index("especie")["ha_media"]
-    return redondear_a_total(x_esperado, TOTAL_EXISTENTES), redondear_a_total(ha_media, TOTAL_NUEVAS)
+    total_existentes = int(round(TOTAL_EXISTENTES * n_nodos / densidad_ha))
+    return (redondear_a_total(x_esperado, total_existentes),
+            redondear_a_total(ha_media, n_nodos - total_existentes))
 
 
 def preparar_malla(nodos, aristas):
-    """Aristas con índices desde 0 y matriz de vecinos (n, 6) rellena con el nodo ficticio."""
+    """Aristas con índices desde 0 y matriz de vecinos (n, 6); todos los nodos deben tener grado 6."""
     n = len(nodos)
     aristas_idx = np.array(aristas) - 1
     vecinos = [[] for _ in range(n)]
     for a, b in aristas_idx:
         vecinos[a].append(b)
         vecinos[b].append(a)
-    matriz = np.full((n, 6), n, dtype=np.int64)
-    for i, lista in enumerate(vecinos):
-        matriz[i, :len(lista)] = lista
-    return aristas_idx, matriz
+    assert all(len(lista) == 6 for lista in vecinos), "la malla debe ser toroidal (grado 6)"
+    return aristas_idx, np.array(vecinos, dtype=np.int64)
 
 
-def W_extendida(W):
-    """W con una fila y columna de ceros para VACIO."""
-    W_ext = np.zeros((N_ESPECIES + 1, N_ESPECIES + 1))
-    W_ext[:N_ESPECIES, :N_ESPECIES] = W.to_numpy()
-    return W_ext
+def competencia_total(asig, aristas_idx, W_mat):
+    return W_mat[asig[aristas_idx[:, 0]], asig[aristas_idx[:, 1]]].sum()
 
 
-def competencia_total(asig, aristas_idx, W_ext):
-    return W_ext[asig[aristas_idx[:, 0]], asig[aristas_idx[:, 1]]].sum()
-
-
-def contenido(cantidades, n_vacios):
-    """Lista de contenidos: cada especie repetida según su cantidad, más los vacíos."""
-    return np.concatenate([np.repeat(np.arange(N_ESPECIES), cantidades.to_numpy()),
-                           np.full(n_vacios, VACIO)])
+def contenido(cantidades):
+    """Lista de contenidos: cada especie repetida según su cantidad."""
+    return np.repeat(np.arange(N_ESPECIES), cantidades.to_numpy())
 
 
 # ---------------------------------------------------------------- Escenarios y líneas base
 
 def generar_existentes(existentes, n_nodos, semilla):
-    """Coloca las plantas existentes en nodos al azar. Regresa (asig, fijo)."""
+    """Coloca las plantas existentes en nodos al azar. Regresa (asig, fijo).
+
+    Los nodos libres quedan en SIN_ASIGNAR; las líneas base los llenan todos.
+    """
     rng = np.random.default_rng(semilla)
-    asig = np.full(n_nodos + 1, VACIO, dtype=np.int64)
+    asig = np.full(n_nodos, SIN_ASIGNAR, dtype=np.int64)
     nodos_exist = rng.choice(n_nodos, existentes.sum(), replace=False)
-    asig[nodos_exist] = contenido(existentes, 0)
+    asig[nodos_exist] = contenido(existentes)
     fijo = np.zeros(n_nodos, dtype=bool)
     fijo[nodos_exist] = True
     return asig, fijo
 
 
 def linea_base_actual(asig_exist, fijo, especies):
-    """Secuencia de 21 plantas repetida en 529 nodos libres equiespaciados, fila por fila.
+    """Secuencia de 21 plantas repetida cíclicamente en todos los nodos libres, fila por fila.
 
     Los nodos ya están en orden de fila (malla.py los genera así). Los nodos con
     planta existente se excluyen, así que la secuencia se los salta y sigue.
     """
     asig = asig_exist.copy()
     libres = np.flatnonzero(~fijo)
-    elegidos = libres[np.floor(np.arange(TOTAL_NUEVAS) * len(libres) / TOTAL_NUEVAS).astype(int)]
     codigos = [especies.get_loc(s) for s in SECUENCIA_ACTUAL]
-    asig[elegidos] = [codigos[k % len(codigos)] for k in range(TOTAL_NUEVAS)]
+    asig[libres] = [codigos[k % len(codigos)] for k in range(len(libres))]
     return asig
 
 
-def cantidades_linea_base(especies):
-    """Plantas nuevas por especie que pone la secuencia actual repetida en 529 nodos."""
-    plantas = [SECUENCIA_ACTUAL[k % len(SECUENCIA_ACTUAL)] for k in range(TOTAL_NUEVAS)]
+def cantidades_linea_base(especies, n_nuevas):
+    """Plantas nuevas por especie que pone la secuencia actual repetida en n_nuevas nodos."""
+    plantas = [SECUENCIA_ACTUAL[k % len(SECUENCIA_ACTUAL)] for k in range(n_nuevas)]
     return pd.Series(plantas).value_counts().reindex(especies, fill_value=0)
 
 
@@ -116,7 +114,8 @@ def linea_base_aleatoria(asig_exist, fijo, nuevas, semilla):
     rng = np.random.default_rng(semilla)
     asig = asig_exist.copy()
     libres = np.flatnonzero(~fijo)
-    asig[libres] = rng.permutation(contenido(nuevas, len(libres) - nuevas.sum()))
+    assert nuevas.sum() == len(libres), "las nuevas deben llenar todos los nodos libres"
+    asig[libres] = rng.permutation(contenido(nuevas))
     return asig
 
 
@@ -203,26 +202,30 @@ def _nucleo_recocido(asig, movibles, vecinos, W, valor, T0, alfa, L, T_min,
     return mejor, valor_mejor, hist_T[:nivel], hist_actual[:nivel], hist_mejor[:nivel]
 
 
-def recocido_simulado(asig_inicial, movibles, vecinos, aristas_idx, W_ext, semilla,
+def recocido_simulado(asig_inicial, movibles, vecinos, aristas_idx, W_mat, semilla,
                       alfa=0.995, L=2000, T_min=1e-3, max_sin_mejora=100, fraccion_frio=0.01,
                       n_muestras_T0=1000, aceptacion_T0=0.8):
-    """Minimiza la competencia total intercambiando el contenido de nodos movibles.
+    """Minimiza la competencia total intercambiando las especies de dos nodos movibles.
+
+    El único movimiento es el intercambio especie-especie entre nodos nuevos
+    (los existentes no se mueven y no hay vacíos), así que las cantidades se conservan.
 
     T0 se elige para que un empeoramiento de tamaño medio (entre 1000 muestreados)
     se acepte con probabilidad `aceptacion_T0`: T0 = -media(delta) / ln(aceptacion_T0).
     Termina cuando T < T_min o tras `max_sin_mejora` niveles sin mejora con T < fraccion_frio * T0.
     """
+    assert (asig_inicial >= 0).all(), "todos los nodos deben tener especie"
     if HAY_NUMBA:
-        datos = (asig_inicial.astype(np.int64), movibles.astype(np.int64), vecinos, W_ext)
+        datos = (asig_inicial.astype(np.int64), movibles.astype(np.int64), vecinos, W_mat)
     else:
-        datos = (asig_inicial.tolist(), movibles.tolist(), vecinos.tolist(), W_ext.tolist())
+        datos = (asig_inicial.tolist(), movibles.tolist(), vecinos.tolist(), W_mat.tolist())
     asig, movibles_, vecinos_, W_ = datos
 
     deltas = _muestrear_empeoramientos(asig, movibles_, vecinos_, W_, n_muestras_T0, semilla)
     T0 = -deltas.mean() / math.log(aceptacion_T0)
     max_niveles = int(math.ceil(math.log(T_min / T0) / math.log(alfa))) + 1
 
-    valor_inicial = competencia_total(asig_inicial, aristas_idx, W_ext)
+    valor_inicial = competencia_total(asig_inicial, aristas_idx, W_mat)
     mejor, valor_mejor, hist_T, hist_actual, hist_mejor = _nucleo_recocido(
         asig, movibles_, vecinos_, W_, valor_inicial, T0, alfa, L, T_min,
         max_sin_mejora, fraccion_frio, max_niveles, semilla + 1)
@@ -236,7 +239,7 @@ def recocido_simulado(asig_inicial, movibles, vecinos, aristas_idx, W_ext, semil
     })
     return {
         "asig": mejor,
-        "valor": competencia_total(mejor, aristas_idx, W_ext),   # recalculado sin errores acumulados
+        "valor": competencia_total(mejor, aristas_idx, W_mat),   # recalculado sin errores acumulados
         "valor_inicial": valor_inicial,
         "T0": T0,
         "historial": historial,
